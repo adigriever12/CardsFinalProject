@@ -17,5 +17,14 @@ namespace MyCards.Models
 
         public Location Location { get; set; }
         public Cuisine Cuisine { get; set; }
+
+        public Category Category { get; set; }
+
+        public bool Kosher { get; set; }
+        public bool Vegan { get; set; }
+        public bool HandicapAccessibility { get; set; }
+
+        public string OpeningHours { get; set; }
+    
     }
 }

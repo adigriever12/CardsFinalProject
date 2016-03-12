@@ -218,6 +218,7 @@
       <DependentUpon>201602271713054_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\ProjectDBContext.cs" />
     <Compile Include="Models\User\AccountViewModels.cs" />
     <Compile Include="Models\Cuisine.cs" />
