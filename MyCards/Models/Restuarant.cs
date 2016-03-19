@@ -15,7 +15,7 @@ namespace MyCards.Models
         public string Description { get; set; }
         // TODO:: add image
 
-        public Location Location { get; set; }
+        public string Address { get; set; }
         public Cuisine Cuisine { get; set; }
 
         public Category Category { get; set; }

@@ -221,6 +221,10 @@
     <Compile Include="Migrations\201603132115388_init1.Designer.cs">
       <DependentUpon>201603132115388_init1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603191638351_init2.cs" />
+    <Compile Include="Migrations\201603191638351_init2.Designer.cs">
+      <DependentUpon>201603191638351_init2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\ProjectDBContext.cs" />
@@ -323,6 +327,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603132115388_init1.resx">
       <DependentUpon>201603132115388_init1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603191638351_init2.resx">
+      <DependentUpon>201603191638351_init2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
