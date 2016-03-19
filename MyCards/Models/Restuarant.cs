@@ -20,10 +20,10 @@ namespace MyCards.Models
 
         public Category Category { get; set; }
 
-        public bool Kosher { get; set; }
-        public bool Vegan { get; set; }
+        public string Kosher { get; set; }
+        public string Phone { get; set; }
         public bool HandicapAccessibility { get; set; }
-
+        public byte[] Image { get; set; }
         public string OpeningHours { get; set; }
     
     }

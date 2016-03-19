@@ -32,14 +32,31 @@ namespace MyCards.Migrations
                     {
                         RestuarantId = c.Int(nullable: false, identity: true),
                         Name = c.String(),
+                        Description = c.String(),
+                        Kosher = c.String(),
+                        Phone = c.String(),
+                        HandicapAccessibility = c.Boolean(nullable: false),
+                        OpeningHours = c.String(),
+                        Category_CategoryId = c.Int(),
                         Cuisine_CuisineId = c.Int(),
                         Location_LocationId = c.Int(),
                     })
                 .PrimaryKey(t => t.RestuarantId)
+                .ForeignKey("dbo.Categories", t => t.Category_CategoryId)
                 .ForeignKey("dbo.Cuisines", t => t.Cuisine_CuisineId)
                 .ForeignKey("dbo.Locations", t => t.Location_LocationId)
+                .Index(t => t.Category_CategoryId)
                 .Index(t => t.Cuisine_CuisineId)
                 .Index(t => t.Location_LocationId);
+            
+            CreateTable(
+                "dbo.Categories",
+                c => new
+                    {
+                        CategoryId = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                    })
+                .PrimaryKey(t => t.CategoryId);
             
             CreateTable(
                 "dbo.Reviews",
@@ -161,6 +178,7 @@ namespace MyCards.Migrations
             DropForeignKey("dbo.Reviews", "Restuarant_RestuarantId", "dbo.Restuarants");
             DropForeignKey("dbo.Restuarants", "Location_LocationId", "dbo.Locations");
             DropForeignKey("dbo.Restuarants", "Cuisine_CuisineId", "dbo.Cuisines");
+            DropForeignKey("dbo.Restuarants", "Category_CategoryId", "dbo.Categories");
             DropIndex("dbo.VisitHistories", new[] { "User_Id" });
             DropIndex("dbo.VisitHistories", new[] { "Restuarant_RestuarantId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
@@ -175,6 +193,7 @@ namespace MyCards.Migrations
             DropIndex("dbo.Reviews", new[] { "Restuarant_RestuarantId" });
             DropIndex("dbo.Restuarants", new[] { "Location_LocationId" });
             DropIndex("dbo.Restuarants", new[] { "Cuisine_CuisineId" });
+            DropIndex("dbo.Restuarants", new[] { "Category_CategoryId" });
             DropTable("dbo.VisitHistories");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.AspNetUserRoles");
@@ -182,6 +201,7 @@ namespace MyCards.Migrations
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.Reviews");
+            DropTable("dbo.Categories");
             DropTable("dbo.Restuarants");
             DropTable("dbo.Locations");
             DropTable("dbo.Cuisines");
