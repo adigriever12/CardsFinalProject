@@ -13,7 +13,7 @@ namespace MyCards.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201602271713054_init"; }
+            get { return "201603132104251_init"; }
         }
         
         string IMigrationMetadata.Source
