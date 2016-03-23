@@ -3,7 +3,7 @@
 }
 
 
- <div id="map" style="width: 500px; height: 400px;margin-top: 20px;">
+ <div id="map" style="width: 100%; height: 590px;">
  </div>
 <input type="hidden"id="mapAddresses" data-value="@ViewBag.restaurantsData" />
 <script>
@@ -12,24 +12,22 @@
         var addresses = $("#mapAddresses").data("value");
         var mapElement = document.getElementById('map');
         var mapOptions = {
-           // center: new google.maps.LatLng(44.5403, -78.5463),
             zoom: 8,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         }
         var map = new google.maps.Map(mapElement, mapOptions);
-        var geocoder = new google.maps.Geocoder();
 
-        var addressesArray = addresses.split('~');
+        for (var i = 0; i < addresses.length; i++) {
+            var myLatLng = new Object();
 
-        for (i = 0; i < addressesArray.length; i++) {
-            geocoder.geocode({ 'address': addressesArray[i] }, function (results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location
-                    });
-                }
-            })
+            myLatLng.lat = parseFloat(addresses[i].lat);
+            myLatLng.lng = parseFloat(addresses[i].lng);
+            
+            var marker = new google.maps.Marker({
+                map: map,
+                position: myLatLng,
+                title: addresses[i].name
+            });
         }
 
         // Set map center to current location
