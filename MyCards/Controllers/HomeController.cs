@@ -18,10 +18,19 @@ namespace MyCards.Controllers
 
         public ActionResult Index()
         {
-            var addresses = db.Restuarants.Include(a => a.Location).Take(10).ToArray();
+            var addresses = db.Restuarants.Include(a => a.Location).ToArray();
             List<locationGmaps> addressesList = new List<locationGmaps>();
 
-            for (int i = 0; i < addresses.Count(); i++)
+            foreach (Restuarant item in addresses)
+            {
+                locationGmaps location = new locationGmaps();
+                location.lat = item.Location.lat;
+                location.lng = item.Location.lng;
+                location.name = item.Name;
+                addressesList.Add(location);
+            }
+
+            /*for (int i = 0; i < addresses.Count(); i++)
             {
                 // TODO : this needs to be in parseData
                 var address = addresses.ElementAt(i).Location.Address.Replace("\r", "");
@@ -55,7 +64,7 @@ namespace MyCards.Controllers
                 {
                    //error in address - TODO
                 }
-            }
+            }*/
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             string addressesString = serializer.Serialize(addressesList);

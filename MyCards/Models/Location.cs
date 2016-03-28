@@ -9,6 +9,7 @@ namespace MyCards.Models
     {
         public int LocationId { get; set; }
         public string Address { get; set; }
-        public string City { get; set; }
+        public string lat { get; set; }
+        public string lng { get; set; }
     }
 }

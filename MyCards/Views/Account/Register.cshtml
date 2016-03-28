@@ -33,14 +33,12 @@
         @Html.LabelFor(m => m.HomeLocation, new {@class = "col-md-2 control-label"})
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.HomeLocation.Address, new {@class = "form-control", @placeholder = "Address"})
-            @Html.TextBoxFor(m => m.HomeLocation.City, new {@class = "form-control", @placeholder = "City"})
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.WorkLocation, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.WorkLocation.Address, new { @class = "form-control", @placeholder = "Address" })
-            @Html.TextBoxFor(m => m.WorkLocation.City, new { @class = "form-control", @placeholder = "City" })
         </div>
     </div>
     <div class="form-group">

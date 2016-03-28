@@ -221,6 +221,10 @@
     <Compile Include="Migrations\201603132115388_init1.Designer.cs">
       <DependentUpon>201603132115388_init1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603282044363_add-coordinates.cs" />
+    <Compile Include="Migrations\201603282044363_add-coordinates.Designer.cs">
+      <DependentUpon>201603282044363_add-coordinates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\ProjectDBContext.cs" />
@@ -325,6 +329,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603132115388_init1.resx">
       <DependentUpon>201603132115388_init1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603282044363_add-coordinates.resx">
+      <DependentUpon>201603282044363_add-coordinates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
