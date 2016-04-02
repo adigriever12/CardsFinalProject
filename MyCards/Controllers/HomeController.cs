@@ -18,59 +18,54 @@ namespace MyCards.Controllers
 
         public ActionResult Index()
         {
-            var addresses = db.Restuarants.Include(a => a.Location).ToArray();
+            var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
             List<locationGmaps> addressesList = new List<locationGmaps>();
 
             foreach (Restuarant item in addresses)
             {
                 locationGmaps location = new locationGmaps();
+                location.id = item.Location.LocationId;
                 location.lat = item.Location.lat;
                 location.lng = item.Location.lng;
                 location.name = item.Name;
+                location.openingHours = item.OpeningHours;
+                location.description = item.Description;
+                location.cuisine = item.Cuisine.Name;
+                location.category = item.Category.Name;
+                location.kosher = item.Kosher;
+                location.phone = item.Phone;
+                location.handicapAccessibility = item.HandicapAccessibility;
+
+                /*location.image = "";
+                if (item.Image != null)
+                {
+                    location.image = Convert.ToBase64String(item.Image);
+                }*/
                 addressesList.Add(location);
             }
-
-            /*for (int i = 0; i < addresses.Count(); i++)
-            {
-                // TODO : this needs to be in parseData
-                var address = addresses.ElementAt(i).Location.Address.Replace("\r", "");
-                var requestUri = string.Format("http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false", Uri.EscapeDataString(address));
-                var request = WebRequest.Create(requestUri);
-                var response = request.GetResponse();
-                var xdoc = XDocument.Load(response.GetResponseStream());
-                while (xdoc.Element("GeocodeResponse").Element("status").Value == "OVER_QUERY_LIMIT")
-                {
-                    address = addresses.ElementAt(i).Location.Address.Replace("\r", "");
-                    requestUri = string.Format("http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false", Uri.EscapeDataString(address));
-                    request = WebRequest.Create(requestUri);
-                    response = request.GetResponse();
-                    xdoc = XDocument.Load(response.GetResponseStream());
-                }
-                if (xdoc.Element("GeocodeResponse").Element("status").Value == "OK")
-                {
-                    var result = xdoc.Element("GeocodeResponse").Element("result");
-                    var locationElement = result.Element("geometry").Element("location");
-                    var lat = locationElement.Element("lat");
-                    var lng = locationElement.Element("lng");
-
-                    locationGmaps location = new locationGmaps();
-                    location.lat = lat.Value;
-                    location.lng = lng.Value;
-                    location.name = addresses[i].Name;
-
-                    addressesList.Add(location);
-                }
-                else if (xdoc.Element("GeocodeResponse").Element("status").Value == "ZERO_RESULTS")
-                {
-                   //error in address - TODO
-                }
-            }*/
-
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            string addressesString = serializer.Serialize(addressesList);
-            ViewBag.restaurantsData = addressesString;   
             
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+           // serializer.MaxJsonLength = int.MaxValue;
+            string addressesString = serializer.Serialize(addressesList);
+            
+            ViewBag.restaurantsData = addressesString;
+
+            ViewBag.restaurants = addresses;
+
             return View();
+        }
+
+        [HttpGet]
+        public string GetImage(int id)
+        {
+            var image = db.Restuarants.Find(id).Image;
+
+            if (image != null)
+            {
+                return Convert.ToBase64String(image);
+            }
+            
+            return "";
         }
 
         public ActionResult About()
@@ -93,4 +88,13 @@ public class locationGmaps
     public string lat;
     public string lng;
     public string name;
+    public string openingHours;
+    public string description;
+   // public string image;
+    public int id;
+    public string cuisine;
+    public string category;
+    public string kosher;
+    public string phone;
+    public bool   handicapAccessibility;
 }
