@@ -3,6 +3,15 @@
     padding-bottom: 20px;
 }
 
+#searchBox {
+    width: 105%;
+}
+
+.toggle.btn {
+    width: 65.7778px !important;
+    height: 28.7778px !important;
+}
+
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;

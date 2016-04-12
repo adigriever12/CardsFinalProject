@@ -30,7 +30,11 @@ namespace MyCards
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/bootstrap-toggle/bootstrap2-toggle.min.css"));
+
+            bundles.Add(new StyleBundle("~/Content/bootstrap-toggle").Include(
+                      "~/Content/bootstrap-toggle/bootstrap2-toggle.min.js"));
         }
     }
 }

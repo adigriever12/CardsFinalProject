@@ -1,119 +1,39 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-<div>
-    <div id="side" style="width: 20%; height: 590px; float: right;">
+
+    <div id="filters" style="order:1;width: 127px;">
+        <label >
+            נגישות  <input id="accessibility-toggle" type="checkbox" data-toggle="toggle"> 
+        </label>
+        <label>
+            כשרות  <input id="kosher-toggle" type="checkbox" data-toggle="toggle"> 
+        </label>
+    </div>
+    <div id="side" style="width: 20%; height: 590px;order:2;">
         <input id="searchBox" type="search" class="form-control" placeholder="חיפוש">
             <div class="list-group" style="height: 590px; overflow: scroll;">
                 @foreach (var item in ViewBag.restaurants)
                 {
-                    <a class="list-group-item" href="#" >@item.Name <br>
+                    <a class="list-group-item" href="#" >
+                        <span class="item-name">@item.Name</span>
+                        <br>
                         <span style="font-size:10px">
                             @item.Location.Address
                         </span>
-                        <input type="hidden"  value="@item.Location.LocationId" /> 
+                        <span class="hidden-id" type="hidden"  value="@item.Location.LocationId"> </span>
+                        <span class="hidden-kosher" type="hidden"  value="@item.Kosher"> </span>
+                        <span class="hidden-accessibility" type="hidden"  value="@item.HandicapAccessibility.ToString()"> </span>
                     </a>
                 }
             </div>
     </div>
 
-    <div id="map" style="width: 80%; height: 590px;">
+    <div id="map" style="width: 70%; height: 613px;order:3;">
     </div>
     <input type="hidden" id="mapAddresses" data-value="@ViewBag.restaurantsData" />
-</div>
-
-<script>
-   /*function initMap() {
-
-        var addresses = $("#mapAddresses").data("value");
-        var mapElement = document.getElementById('map');
-        var mapOptions = {
-            zoom: 12,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            styles: [{"featureType":"road","elementType":"geometry","stylers":[{"lightness":100},{"visibility":"simplified"}]},{"featureType":"water","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#C6E2FF"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#C5E3BF"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#D1D1B8"}]}]
-        }
-        var map = new google.maps.Map(mapElement, mapOptions);
-        var lastInfoWindow;
-        var addMarker = function (myLatLng, address) {
-
-            var content = "<h4>" + address.name + "</h4>" +
-                "<p><label>שעות פתיחה : </label> " + address.openingHours + "</p>" +
-                "<p><label>תיאור : </label> " + address.description + "</p>" +
-               // "<p><img src='data:image/png;base64," + address.image + "' alt='Red dot'></p>" + 
-                "<p><label>סוג מטבח : </label> " + address.cuisine + "</p>" +
-                "<p><label>קטגוריה : </label> " + address.category + "</p>" +
-                "<p><label>כשרות : </label> " + address.kosher + "</p>" + // TODO : check if not empty
-                "<p><label>טלפון : </label> " + address.phone + "</p>" +
-                "<p><label>נגישות : </label> " + address.handicapAccessibility + "</p>"; // TODO
-
-            var infoWindow = new google.maps.InfoWindow({
-                content: content
-            });
-
-            var marker = new google.maps.Marker({
-                id: address.id,
-                map: map,
-                position: myLatLng,
-                title: address.name
-            });
-            
-            marker.addListener('click', function () {
-
-                if (lastInfoWindow !== undefined) {
-                    lastInfoWindow.close();
-                }
-                lastInfoWindow = infoWindow;
 
 
-                $.get("/Home/GetImage", { id: marker.id },
-                    function (data) {
-                        infoWindow.setContent(infoWindow.getContent() + "<img style='width: 100px;height:50px;' src='data:image/png;base64," + data + "'>");
-                    });
-
-                infoWindow.open(map, marker);
-            });
-        };
-
-        for (var i = 0; i < addresses.length; i++) {
-            var myLatLng = new Object();
-
-            myLatLng.lat = parseFloat(addresses[i].lat);
-            myLatLng.lng = parseFloat(addresses[i].lng);
-            addMarker(myLatLng, addresses[i]);
-            
-        }
-
-        
-
-        // Set map center to current location
-        var initialLocation;
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                map.setCenter(initialLocation);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: initialLocation,
-                    title: 'מיקום נוכחי',
-                    zIndex: google.maps.Marker.MAX_ZINDEX + 1,
-                    icon: {
-                        url: './Images/blue-marker.png',
-                        scaledSize: new google.maps.Size(50, 50)
-                    }
-                });
-
-                }, function () {
-                });
-            }
-        // Browser doesn't support Geolocation
-        else {
-            alert("Geolocation service failed.");
-        }
-
-    }*/
-
-    </script>
 @*<script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhQ4O1dzFHh07ZDQa3k_ECAbO_LDXQZBA&callback=initMap">
 </script>

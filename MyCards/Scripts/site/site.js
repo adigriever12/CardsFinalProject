@@ -1,8 +1,9 @@
 ﻿var map;
+var markers = [];
 
 var initMap = function () {
 
-    var addresses = $("#mapAddresses").data("value");
+    var restaurants = $("#mapAddresses").data("value");
     var mapElement = document.getElementById('map');
     var mapOptions = {
         zoom: 12,
@@ -13,12 +14,12 @@ var initMap = function () {
     map = new google.maps.Map(mapElement, mapOptions);
     
 
-    for (var i = 0; i < addresses.length; i++) {
+    for (var i = 0; i < restaurants.length; i++) {
         var myLatLng = new Object();
 
-        myLatLng.lat = parseFloat(addresses[i].lat);
-        myLatLng.lng = parseFloat(addresses[i].lng);
-        addMarker(myLatLng, addresses[i]);
+        myLatLng.lat = parseFloat(restaurants[i].lat);
+        myLatLng.lng = parseFloat(restaurants[i].lng);
+        addMarker(myLatLng, restaurants[i]);
 
     }
     // Set map center to current location
@@ -51,50 +52,138 @@ var initMap = function () {
 
 var lastInfoWindow;
 
-var addMarker = function (myLatLng, address) {
+var chooseMarker = function (marker, infoWindow) {
+    if (lastInfoWindow !== undefined) {
+        lastInfoWindow.close();
+    }
 
-    var content = "<h4>" + address.name + "</h4>" +
-        "<p><label>שעות פתיחה : </label> " + address.openingHours + "</p>" +
-        "<p><label>תיאור : </label> " + address.description + "</p>" +
-       // "<p><img src='data:image/png;base64," + address.image + "' alt='Red dot'></p>" + 
-        "<p><label>סוג מטבח : </label> " + address.cuisine + "</p>" +
-        "<p><label>קטגוריה : </label> " + address.category + "</p>" +
-        "<p><label>כשרות : </label> " + address.kosher + "</p>" + // TODO : check if not empty
-        "<p><label>טלפון : </label> " + address.phone + "</p>" +
-        "<p><label>נגישות : </label> " + address.handicapAccessibility + "</p>"; // TODO
+    lastInfoWindow = infoWindow;
+
+    if (infoWindow.getContent().indexOf("img") == -1) {
+        $.get("/Home/GetImage", { id: marker.id },
+            function (data) {
+                infoWindow.setContent(infoWindow.getContent() + "<img style='width: 100px;height:50px;' src='data:image/png;base64," + data + "'>");
+            });
+    }
+
+    infoWindow.open(map, marker);
+};
+
+var addMarker = function (myLatLng, restaurant) {
+
+    var accessability = restaurant.handicapAccessibility ? "קיימת" : "לא קיימת";
+
+    var content = "<h4>" + restaurant.name + "</h4>" +
+        "<p><label>שעות פתיחה : </label> " + restaurant.openingHours + "</p>" +
+        "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
+       // "<p><img src='data:image/png;base64," + restaurant.image + "' alt='Red dot'></p>" + 
+        "<p><label>סוג מטבח : </label> " + restaurant.cuisine + "</p>" +
+        "<p><label>קטגוריה : </label> " + restaurant.category + "</p>" +
+        "<p><label>כשרות : </label> " + restaurant.kosher + "</p>" + // TODO : check if not empty
+        "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
+        "<p><label>נגישות : </label> " + accessability + "</p>"; // TODO
 
     var infoWindow = new google.maps.InfoWindow({
         content: content
     });
 
     var marker = new google.maps.Marker({
-        id: address.id,
+        id: restaurant.id,
         map: map,
         position: myLatLng,
-        title: address.name
+        title: restaurant.name,
+        icon: {
+            url: './Images/' + restaurant.score + '.png',
+            //scaledSize: new google.maps.Size(50, 50)
+        }
     });
 
     marker.addListener('click', function () {
+        chooseMarker(marker, infoWindow);
+    });
 
-        if (lastInfoWindow !== undefined) {
-            lastInfoWindow.close();
+    markers.push({
+        id: restaurant.id,
+        marker: marker,
+        info: infoWindow
+    });
+};
+
+var findMarkerById = function (id) {
+    for (var i = 0; i < markers.length; i++) {
+        if (markers[i].id == id) {
+            return markers[i];
         }
-        lastInfoWindow = infoWindow;
+    }
+};
 
+var listListen = function () {
+    $(".list-group-item").click(function () {
+        var id = $(this).find('.hidden-id').attr('value');
+        var marker = findMarkerById(id);
+        var infoWindow = marker.info;
 
-        $.get("/Home/GetImage", { id: marker.id },
-            function (data) {
-                infoWindow.setContent(infoWindow.getContent() + "<img style='width: 100px;height:50px;' src='data:image/png;base64," + data + "'>");
+        chooseMarker(marker.marker, marker.info);
+    });
+};
+
+var searchKeyup = function() {
+    $("#searchBox").keyup(function () {
+
+        var searchedContent = $("#searchBox").val().toLowerCase();
+
+        if (searchedContent != "") {
+            $.each($(".list-group-item"), function (i, val) {
+                var name = $(this).find('.item-name').text().toLowerCase();
+
+                if (name.indexOf(searchedContent) == -1) {
+                    $(this).attr('class', 'list-group-item hidden');
+                }
+                else {
+                    $(this).attr('class', 'list-group-item');
+                }
             });
+        }
+    });
+};
 
-        infoWindow.open(map, marker);
+var filtersChanged = function () {
+    $('#accessibility-toggle').change(function () {
+        var isChecked = $(this).prop('checked').toString();
+
+        $.each($(".list-group-item"), function (i, val) {
+            var accessibility = $(this).find('.hidden-accessibility').attr('value').toLowerCase();
+
+            if (accessibility != isChecked) {
+                $(this).attr('class', 'list-group-item hidden');
+            }
+            else {
+                $(this).attr('class', 'list-group-item');
+            }
+
+        });
+    });
+
+    $('#kosher-toggle').change(function () {
+        var isChecked = $(this).prop('checked');
+
+        $.each($(".list-group-item"), function (i, val) {
+            var kosher = $(this).find('.hidden-kosher').attr('value').toLowerCase();
+
+            if (kosher == "" && isChecked) {
+                $(this).attr('class', 'list-group-item hidden');
+            }
+            else {
+                $(this).attr('class', 'list-group-item');
+            }
+
+        });
     });
 };
 
 $(document).ready(function () {
     initMap();
-
-    //$("#searchBox").keyup(function (event) { TODO
-    //
-    //});
+    listListen();
+    searchKeyup();
+    filtersChanged();
 });

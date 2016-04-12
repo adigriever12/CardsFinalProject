@@ -225,6 +225,10 @@
     <Compile Include="Migrations\201603282044363_add-coordinates.Designer.cs">
       <DependentUpon>201603282044363_add-coordinates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604122021101_add-score.cs" />
+    <Compile Include="Migrations\201604122021101_add-score.Designer.cs">
+      <DependentUpon>201604122021101_add-score.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\ProjectDBContext.cs" />
@@ -240,12 +244,21 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
+    <Content Include="Content\bootstrap-toggle\bootstrap2-toggle.min.css" />
+    <Content Include="Content\bootstrap-toggle\bootstrap2-toggle.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\1-marker.png" />
+    <Content Include="Images\2-marker.png" />
+    <Content Include="Images\3-marker.png" />
+    <Content Include="Images\4-marker.png" />
+    <Content Include="Images\5-marker.png" />
+    <Content Include="Images\black-marker.png" />
     <Content Include="Images\blue-marker.png" />
     <Content Include="Images\logo_temp.PNG" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
@@ -335,6 +348,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603282044363_add-coordinates.resx">
       <DependentUpon>201603282044363_add-coordinates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604122021101_add-score.resx">
+      <DependentUpon>201604122021101_add-score.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

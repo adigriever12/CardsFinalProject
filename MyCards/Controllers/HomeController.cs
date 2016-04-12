@@ -19,35 +19,32 @@ namespace MyCards.Controllers
         public ActionResult Index()
         {
             var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
-            List<locationGmaps> addressesList = new List<locationGmaps>();
+
+            List<RestaurantData> addressesList = new List<RestaurantData>();
 
             foreach (Restuarant item in addresses)
             {
-                locationGmaps location = new locationGmaps();
-                location.id = item.Location.LocationId;
-                location.lat = item.Location.lat;
-                location.lng = item.Location.lng;
-                location.name = item.Name;
-                location.openingHours = item.OpeningHours;
-                location.description = item.Description;
-                location.cuisine = item.Cuisine.Name;
-                location.category = item.Category.Name;
-                location.kosher = item.Kosher;
-                location.phone = item.Phone;
-                location.handicapAccessibility = item.HandicapAccessibility;
+                RestaurantData data = new RestaurantData();
+                data.id = item.Location.LocationId;
+                data.lat = item.Location.lat;
+                data.lng = item.Location.lng;
+                data.name = item.Name;
+                data.openingHours = item.OpeningHours;
+                data.description = item.Description;
+                data.cuisine = item.Cuisine.Name;
+                data.category = item.Category.Name;
+                data.kosher = item.Kosher;
+                data.phone = item.Phone;
+                data.handicapAccessibility = item.HandicapAccessibility;
+                data.score = item.Score;
 
-                /*location.image = "";
-                if (item.Image != null)
-                {
-                    location.image = Convert.ToBase64String(item.Image);
-                }*/
-                addressesList.Add(location);
+                addressesList.Add(data);
             }
-            
+
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-           // serializer.MaxJsonLength = int.MaxValue;
+            // serializer.MaxJsonLength = int.MaxValue;
             string addressesString = serializer.Serialize(addressesList);
-            
+
             ViewBag.restaurantsData = addressesString;
 
             ViewBag.restaurants = addresses;
@@ -83,7 +80,7 @@ namespace MyCards.Controllers
         }
     }
 }
-public class locationGmaps
+public class RestaurantData
 {
     public string lat;
     public string lng;
@@ -97,4 +94,5 @@ public class locationGmaps
     public string kosher;
     public string phone;
     public bool   handicapAccessibility;
+    public int score;
 }

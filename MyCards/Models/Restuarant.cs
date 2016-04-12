@@ -26,5 +26,6 @@ namespace MyCards.Models
         public byte[] Image { get; set; }
         public string OpeningHours { get; set; }
     
+        public int Score { get; set; }
     }
 }
