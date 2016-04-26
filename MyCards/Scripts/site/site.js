@@ -182,7 +182,7 @@ var filtersChanged = function () {
 };
 
 $(document).ready(function () {
-    initMap();
+    //initMap();
     listListen();
     searchKeyup();
     filtersChanged();

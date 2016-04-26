@@ -229,9 +229,13 @@
     <Compile Include="Migrations\201604122021101_add-score.Designer.cs">
       <DependentUpon>201604122021101_add-score.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604261833533_add-suggestion-algoritm.cs" />
+    <Compile Include="Migrations\201604261833533_add-suggestion-algoritm.Designer.cs">
+      <DependentUpon>201604261833533_add-suggestion-algoritm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\ProjectDBContext.cs" />
+    <Compile Include="Models\UserRankingData.cs" />
     <Compile Include="Models\User\AccountViewModels.cs" />
     <Compile Include="Models\Cuisine.cs" />
     <Compile Include="Models\User\IdentityModels.cs" />
@@ -283,6 +287,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\site\gmap.js" />
     <Content Include="Scripts\site\site.js" />
+    <Content Include="Scripts\site\SQLQuery1.sql" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -351,6 +356,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604122021101_add-score.resx">
       <DependentUpon>201604122021101_add-score.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604261833533_add-suggestion-algoritm.resx">
+      <DependentUpon>201604261833533_add-suggestion-algoritm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
