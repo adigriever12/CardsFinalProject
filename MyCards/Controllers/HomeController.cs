@@ -8,6 +8,9 @@ using System.Data.Entity;
 using System.Web.Script.Serialization;
 using System.Net;
 using System.Xml.Linq;
+using System.Data.SqlClient;
+using System.Data;
+using System.Configuration;
 
 namespace MyCards.Controllers
 {
@@ -18,6 +21,34 @@ namespace MyCards.Controllers
 
         public ActionResult Index()
         {
+
+            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                using (var cmd = new SqlCommand("Procedure", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@user", 5);
+                    con.Open();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // do something with the row
+                            var s1 = reader.GetInt32(0);
+                            var s2 = reader.GetDouble(3);
+
+                            
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+
             var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
 
             List<RestaurantData> addressesList = new List<RestaurantData>();

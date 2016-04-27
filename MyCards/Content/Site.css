@@ -1,14 +1,28 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
 }
 
 #searchBox {
 }
 
+#panel, #flip {
+    border: solid 1px #c3c3c3;
+}
+
+.dropdown-menu li {
+    text-align: center;
+}
+#panel {
+    display: none;
+    width: 30px;
+}
+
 .toggle.btn {
     width: 65.7778px !important;
     height: 28.7778px !important;
+}
+
+#links a{
+    padding: 5px;
 }
 
 /* Set padding to keep content from hitting the edges */

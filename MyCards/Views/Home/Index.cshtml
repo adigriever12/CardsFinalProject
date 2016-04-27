@@ -1,39 +1,49 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-<div style="display: flex;justify-content: flex-start;align-content:center;">
+<div style="display: flex; justify-content: flex-start;align-content:center;">
+    
 
-    <div id="filters" style="order:1;width: 127px;">
-        <label >
-            נגישות  <input id="accessibility-toggle" type="checkbox" data-toggle="toggle"> 
-        </label>
-        <label>
-            כשרות  <input id="kosher-toggle" type="checkbox" data-toggle="toggle"> 
-        </label>
-    </div>
-    <div id="side" style="width: 20%; height: 590px;order:2;">
-        <input id="searchBox" type="search" class="form-control" placeholder="חיפוש">
-            <div class="list-group" style="height: 590px; overflow: scroll;">
-                @foreach (var item in ViewBag.restaurants)
-                {
-                    <a class="list-group-item" href="#" >
-                        <span class="item-name">@item.Name</span>
-                        <br>
-                        <span style="font-size:10px">
-                            @item.Location.Address
-                        </span>
-                        <span class="hidden-id" type="hidden"  value="@item.Location.LocationId"> </span>
-                        <span class="hidden-kosher" type="hidden"  value="@item.Kosher"> </span>
-                        <span class="hidden-accessibility" type="hidden"  value="@item.HandicapAccessibility.ToString()"> </span>
-                    </a>
-                }
-            </div>
+<div id="filters" style="order:1;width: 127px;">
+       
     </div>
 
-    <div id="map" style="width: 80%; height: 613px;order:3;">
+
+    <div id="side" style="width: 20%; order:2;">
+
+        <input id="searchBox" type="search" class="form-control" placeholder="חיפוש" style="width: 198px;display: inline-block;">
+            
+        <div class="dropdown" style="display:inline-block;">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">סנן
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><label >נגישות<input id="accessibility-toggle" type="checkbox" data-toggle="toggle"></label></li>
+                <li><label>כשרות<input id="kosher-toggle" type="checkbox" data-toggle="toggle"> </label></li>
+            </ul>
+        </div>
+
+        <div class="list-group" style="overflow-y: scroll;height: 88vh;">
+            @foreach (var item in ViewBag.restaurants)
+            {
+                <a class="list-group-item" href="#" >
+                    <span class="item-name">@item.Name</span>
+                    <br>
+                    <span style="font-size:10px">
+                        @item.Location.Address
+                    </span>
+                    <span class="hidden-id" type="hidden"  value="@item.Location.LocationId"> </span>
+                    <span class="hidden-kosher" type="hidden"  value="@item.Kosher"> </span>
+                    <span class="hidden-accessibility" type="hidden"  value="@item.HandicapAccessibility.ToString()"> </span>
+                </a>
+            }
+        </div>
+    </div>
+
+    <div id="map" style="width: 80%; order:3;">
     </div>
     <input type="hidden" id="mapAddresses" data-value="@ViewBag.restaurantsData" />
 </div>
+
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/site/site.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhQ4O1dzFHh07ZDQa3k_ECAbO_LDXQZBA&callback=initMap"></script>
