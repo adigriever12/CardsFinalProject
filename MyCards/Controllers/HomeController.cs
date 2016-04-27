@@ -46,11 +46,6 @@ namespace MyCards.Controllers
                 }
             }
 
-    */
-
-
-
-
             var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
 
             string curUser = User.Identity.GetUserId();
@@ -111,7 +106,7 @@ namespace MyCards.Controllers
 
         private int ScoreResturant(Restuarant item)
         {
-            
+
 
             return 1;
         }
@@ -125,7 +120,7 @@ namespace MyCards.Controllers
             {
                 return Convert.ToBase64String(image);
             }
-            
+
             return "";
         }
 
@@ -148,7 +143,7 @@ namespace MyCards.Controllers
         public void UpdateRank(int rank, int restuarantId)
         {
             string curUser = User.Identity.GetUserId();
-            
+
             var userRankingList = db.UserRanking.Where(a => a.RestuarantId == restuarantId && a.UserId == curUser);
             var t = db.Restuarants.Count();
             if (userRankingList.Count() > 0)
@@ -157,7 +152,7 @@ namespace MyCards.Controllers
                 userRanking.rating = rank;
 
                 db.Entry(userRanking).State = EntityState.Modified;
-    }
+            }
             else
             {
                 UserRanking newUserRanking = new UserRanking();
@@ -166,40 +161,42 @@ namespace MyCards.Controllers
                 newUserRanking.UserId = curUser;
 
                 db.UserRanking.Add(newUserRanking);
-}
-
-public class RecommendedData
-{
-    public RecommendedData(int id, string name, byte[] image)
-    {
-        Id = id;
-        Name = name;
-        if (image != null)
-        {
-            Image = Convert.ToBase64String(image);
+            }
         }
     }
+    public class RecommendedData
+    {
+        public RecommendedData(int id, string name, byte[] image)
+        {
+            Id = id;
+            Name = name;
+            if (image != null)
+            {
+                Image = Convert.ToBase64String(image);
+            }
+        }
 
-    public int Id;
-    public string Name;
-    public string Image;
-}
+        public int Id;
+        public string Name;
+        public string Image;
+    }
 
-public class RestaurantData
-{
-    public string lat;
-    public string lng;
-    public string name;
-    public string openingHours;
-    public string description;
-   // public string image;
-    public int id;
-    public string cuisine;
-    public string category;
-    public string kosher;
-    public string phone;
-    public bool   handicapAccessibility;
-    public int score;
-    public bool ratedByMe;
-    public string address;
+    public class RestaurantData
+    {
+        public string lat;
+        public string lng;
+        public string name;
+        public string openingHours;
+        public string description;
+        // public string image;
+        public int id;
+        public string cuisine;
+        public string category;
+        public string kosher;
+        public string phone;
+        public bool handicapAccessibility;
+        public int score;
+        public bool ratedByMe;
+        public string address;
+    }
 }
