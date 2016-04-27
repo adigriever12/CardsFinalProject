@@ -52,4 +52,13 @@ textarea {
         color:black;
         font-weight:500;
 }
+.been {
+    float: left;
+}
+span.glyphicon.glyphicon-ok.been.grey{
+    color:#CBD5DE;
+}
+span.glyphicon.glyphicon-ok.been.green{
+    color:#009933;
+}
 

@@ -11,6 +11,8 @@
 
     <div id="side" style="width: 20%; order:2;">
 
+       
+        
         <input id="searchBox" type="search" class="form-control" placeholder="חיפוש" style="width: 198px;display: inline-block;">
             
         <div class="dropdown" style="display:inline-block;">
@@ -26,14 +28,36 @@
             @foreach (var item in ViewBag.restaurants)
             {
                 <a class="list-group-item" href="#" >
-                    <span class="item-name">@item.Name</span>
+                    <span class="item-name">@item.name</span>
+                    <div class="dropdown" style="float:left;">
+                        @if (@item.ratedByMe == true)
+                        {
+                            <span id="beenGreen" class="glyphicon glyphicon-ok been green dropdown-toggle" data-toggle="dropdown"></span>
+                        }
+                        else
+                        {
+                            <span id="beenGrey"class="glyphicon glyphicon-ok been grey dropdown-toggle" data-toggle="dropdown"></span>
+                        }
+                        
+                        <ul class="dropdown-menu">
+                            <li style="direction:ltr;">
+                            <input class="rating rating-loading inputStar" data-min="0" data-max="5" data-step="1" data-size="xxs">
+                            </li>
+                           
+                        </ul>
+                        <br>
+                    </div>
                     <br>
+                    <span class="item-name been" style="font-size:10px; direction:ltr;">@item.score/5</span>
+                    
                     <span style="font-size:10px">
-                        @item.Location.Address
+                        @item.address
                     </span>
-                    <span class="hidden-id" type="hidden"  value="@item.Location.LocationId"> </span>
-                    <span class="hidden-kosher" type="hidden"  value="@item.Kosher"> </span>
-                    <span class="hidden-accessibility" type="hidden"  value="@item.HandicapAccessibility.ToString()"> </span>
+                   
+                    <span class="hidden-id" type="hidden"  value="@item.id"> </span>
+
+                    <span class="hidden-kosher" type="hidden"  value="@item.kosher"> </span>
+                    <span class="hidden-accessibility" type="hidden"  value="@item.handicapAccessibility.ToString()"> </span>
                 </a>
             }
         </div>

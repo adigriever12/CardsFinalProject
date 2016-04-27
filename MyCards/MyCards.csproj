@@ -233,8 +233,21 @@
     <Compile Include="Migrations\201604261833533_add-suggestion-algoritm.Designer.cs">
       <DependentUpon>201604261833533_add-suggestion-algoritm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604271813080_change-ranking.cs" />
+    <Compile Include="Migrations\201604271813080_change-ranking.Designer.cs">
+      <DependentUpon>201604271813080_change-ranking.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604271902149_new-ranking.cs" />
+    <Compile Include="Migrations\201604271902149_new-ranking.Designer.cs">
+      <DependentUpon>201604271902149_new-ranking.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604271903125_new-ranking1.cs" />
+    <Compile Include="Migrations\201604271903125_new-ranking1.Designer.cs">
+      <DependentUpon>201604271903125_new-ranking1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\UserRanking.cs" />
     <Compile Include="Models\UserRankingData.cs" />
     <Compile Include="Models\User\AccountViewModels.cs" />
     <Compile Include="Models\Cuisine.cs" />
@@ -253,6 +266,10 @@
     <Content Include="Content\bootstrap-toggle\bootstrap2-toggle.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\starRating\star-rating.css" />
+    <Content Include="Content\starRating\theme-krajee-fa.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -264,6 +281,7 @@
     <Content Include="Images\5-marker.png" />
     <Content Include="Images\black-marker.png" />
     <Content Include="Images\blue-marker.png" />
+    <Content Include="Images\loading.gif" />
     <Content Include="Images\logo_temp.PNG" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
@@ -288,6 +306,7 @@
     <Content Include="Scripts\site\gmap.js" />
     <Content Include="Scripts\site\site.js" />
     <Content Include="Scripts\site\SQLQuery1.sql" />
+    <Content Include="Scripts\starRating\star-rating.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -359,6 +378,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604261833533_add-suggestion-algoritm.resx">
       <DependentUpon>201604261833533_add-suggestion-algoritm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604271813080_change-ranking.resx">
+      <DependentUpon>201604271813080_change-ranking.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604271902149_new-ranking.resx">
+      <DependentUpon>201604271902149_new-ranking.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604271903125_new-ranking1.resx">
+      <DependentUpon>201604271903125_new-ranking1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

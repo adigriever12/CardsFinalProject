@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
+using Microsoft.AspNet.Identity;
 
 namespace MyCards.Controllers
 {
@@ -21,7 +22,7 @@ namespace MyCards.Controllers
 
         public ActionResult Index()
         {
-
+/*
             using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 using (var cmd = new SqlCommand("Procedure", con))
@@ -44,19 +45,22 @@ namespace MyCards.Controllers
                 }
             }
 
-
+    */
 
 
 
 
             var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
 
+            string curUser = User.Identity.GetUserId();
+            var userRankingList = db.UserRanking.Where(a => a.UserId == curUser).ToList();
+
             List<RestaurantData> addressesList = new List<RestaurantData>();
 
             foreach (Restuarant item in addresses)
             {
                 RestaurantData data = new RestaurantData();
-                data.id = item.Location.LocationId;
+                data.id = item.RestuarantId;
                 data.lat = item.Location.lat;
                 data.lng = item.Location.lng;
                 data.name = item.Name;
@@ -68,6 +72,17 @@ namespace MyCards.Controllers
                 data.phone = item.Phone;
                 data.handicapAccessibility = item.HandicapAccessibility;
                 data.score = item.Score;
+                data.address = item.Location.Address;
+
+                var findIfRank = userRankingList.Find(t => t.RestuarantId == item.RestuarantId);
+                if (findIfRank == null)
+                {
+                    data.ratedByMe = false;
+                }
+                else
+                {
+                    data.ratedByMe = true;
+                }
 
                 addressesList.Add(data);
             }
@@ -78,7 +93,8 @@ namespace MyCards.Controllers
 
             ViewBag.restaurantsData = addressesString;
 
-            ViewBag.restaurants = addresses;
+            //ViewBag.restaurants = addresses;
+            ViewBag.restaurants = addressesList;
 
             return View();
         }
@@ -109,6 +125,35 @@ namespace MyCards.Controllers
 
             return View();
         }
+
+
+        [HttpPost]
+        public void UpdateRank(int rank, int restuarantId)
+        {
+            string curUser = User.Identity.GetUserId();
+            
+            var userRankingList = db.UserRanking.Where(a => a.RestuarantId == restuarantId && a.UserId == curUser);
+            var t = db.Restuarants.Count();
+            if (userRankingList.Count() > 0)
+            {
+                UserRanking userRanking = userRankingList.First();
+                userRanking.rating = rank;
+
+                db.Entry(userRanking).State = EntityState.Modified;
+            }
+            else
+            {
+                UserRanking newUserRanking = new UserRanking();
+                newUserRanking.rating = rank;
+                newUserRanking.RestuarantId = restuarantId;
+                newUserRanking.UserId = curUser;
+
+                db.UserRanking.Add(newUserRanking);
+            }
+
+            db.SaveChanges();
+
+        }
     }
 }
 public class RestaurantData
@@ -126,4 +171,6 @@ public class RestaurantData
     public string phone;
     public bool   handicapAccessibility;
     public int score;
+    public bool ratedByMe;
+    public string address;
 }

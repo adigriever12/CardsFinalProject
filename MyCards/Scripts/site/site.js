@@ -119,11 +119,16 @@ var findMarkerById = function (id) {
 
 var listListen = function () {
     $(".list-group-item").click(function () {
-        var id = $(this).find('.hidden-id').attr('value');
-        var marker = findMarkerById(id);
-        var infoWindow = marker.info;
+        var clickedId = $(event.target)[0].id;
 
-        chooseMarker(marker.marker, marker.info);
+        // Check if not the "been" btn
+        if ( (clickedId != 'beenGreen')  && (clickedId != 'beenGrey') ){
+            var id = $(this).find('.hidden-id').attr('value');
+            var marker = findMarkerById(id);
+            var infoWindow = marker.info;
+
+            chooseMarker(marker.marker, marker.info);
+        }
     });
 };
 
@@ -181,9 +186,17 @@ var filtersChanged = function () {
     });
 };
 
+var selectRanking = function () {
+    $('.inputStar').on('rating.change', function (event, value, caption) {
+        console.log(value);
+        $.post("/Home/UpdateRank", { rank: value, restuarantId: $(this).closest("a").children(".hidden-id").attr('value') });
+    });
+};
+
 $(document).ready(function () {
     //initMap();
     listListen();
     searchKeyup();
     filtersChanged();
+    selectRanking();
 });
