@@ -19,12 +19,7 @@ namespace MyCards.Models
         public int RestuarantId { get; set; }
 
         [DefaultValue(0)]
+        [Range(0, 5)]
         public double rating { get; set; }
-
-       /* userid varchar(50) not null,
-    itemid varchar(50) not null,
-    rating float not null default 0,
-  updtime  datetime default getdate(),
-    primary key(userid, itemid)*/
     }
 }

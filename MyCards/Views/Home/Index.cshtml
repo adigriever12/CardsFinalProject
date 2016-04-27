@@ -3,26 +3,33 @@
 }
 <div style="display: flex; justify-content: flex-start;align-content:center;">
     
-
-<div id="filters" style="order:1;width: 127px;">
-       
+    <div id="filters" style="order:1;width: 10%;">
+       <h5>מומלצים עבורך</h5>
+        <ul>
+            @foreach (var item in ViewBag.recommended)
+            {
+                <li>
+                    <label>@item.Name</label>
+                    <img src="data:image/png;base64,@item.Image"/>
+                </li>
+            }
+        </ul>
     </div>
 
+    <div id="side" style="width: 20%; order:2;border-left: 1px solid #C9E5AA">
 
-    <div id="side" style="width: 20%; order:2;">
-
-        <input id="searchBox" type="search" class="form-control" placeholder="חיפוש" style="width: 198px;display: inline-block;">
+        <input id="searchBox" type="search" class="form-control" placeholder="חיפוש" style="width: 76%;;display: inline-block;">
             
         <div class="dropdown" style="display:inline-block;">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">סנן
             <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                <li><label >נגישות<input id="accessibility-toggle" type="checkbox" data-toggle="toggle"></label></li>
-                <li><label>כשרות<input id="kosher-toggle" type="checkbox" data-toggle="toggle"> </label></li>
+                <li><label>נגישות</label><input id="accessibility-toggle" type="checkbox" data-toggle="toggle"/></li>
+                <li><label>כשרות</label><input id="kosher-toggle" type="checkbox" data-toggle="toggle"></li>
             </ul>
         </div>
 
-        <div class="list-group" style="overflow-y: scroll;height: 88vh;">
+        <div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
             @foreach (var item in ViewBag.restaurants)
             {
                 <a class="list-group-item" href="#" >
@@ -39,8 +46,12 @@
         </div>
     </div>
 
-    <div id="map" style="width: 80%; order:3;">
+
+    <div id="map" style="width: 70%; order:3;">
     </div>
+    
+
+
     <input type="hidden" id="mapAddresses" data-value="@ViewBag.restaurantsData" />
 </div>
 

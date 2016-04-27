@@ -11,6 +11,44 @@
 .dropdown-menu li {
     text-align: center;
 }
+
+#filters {
+    border-left: 1px solid #C9E5AA;
+}
+
+.dropdown-menu label {
+    margin-left: 6px;
+}
+
+.dropdown-menu li {
+    margin-bottom: 5px;
+}
+
+#filters li {
+    list-style-type: none;
+    text-align: center;
+    margin: 12px;
+    background-color: #EAF9DE;
+    border: 1px inset #96C670;
+    border-radius: 25px;
+}
+
+#filters img {
+    border-radius: 76px;
+    width: 95px;
+    height:50px;
+}
+
+#filters h5 {
+    text-align: center;
+    font-weight: bold;
+    color: #646A5C;
+}
+
+#filters ul {
+    padding:0;
+}
+
 #panel {
     display: none;
     width: 30px;

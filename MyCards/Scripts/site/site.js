@@ -12,7 +12,6 @@ var initMap = function () {
     }
 
     map = new google.maps.Map(mapElement, mapOptions);
-    
 
     for (var i = 0; i < restaurants.length; i++) {
         var myLatLng = new Object();
