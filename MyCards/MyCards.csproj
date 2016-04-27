@@ -245,6 +245,10 @@
     <Compile Include="Migrations\201604271903125_new-ranking1.Designer.cs">
       <DependentUpon>201604271903125_new-ranking1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604271954089_delete-rankings-old.cs" />
+    <Compile Include="Migrations\201604271954089_delete-rankings-old.Designer.cs">
+      <DependentUpon>201604271954089_delete-rankings-old.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\UserRanking.cs" />
@@ -387,6 +391,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604271903125_new-ranking1.resx">
       <DependentUpon>201604271903125_new-ranking1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604271954089_delete-rankings-old.resx">
+      <DependentUpon>201604271954089_delete-rankings-old.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

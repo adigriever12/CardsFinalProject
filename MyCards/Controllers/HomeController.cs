@@ -31,7 +31,7 @@ namespace MyCards.Controllers
                 using (var cmd = new SqlCommand("Procedure", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@userid", "5");
+                    cmd.Parameters.AddWithValue("@userid", userid);
                     con.Open();
 
                     using (var reader = cmd.ExecuteReader())
@@ -162,6 +162,8 @@ namespace MyCards.Controllers
 
                 db.UserRanking.Add(newUserRanking);
             }
+
+            db.SaveChanges();
         }
     }
     public class RecommendedData
