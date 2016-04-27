@@ -20,15 +20,18 @@ namespace MyCards.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index()
+        public ActionResult Index(string currentLocation)
         {
-/*
+            List<int> recommendedIds = new List<int>();
+
             using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
+                string userid = User.Identity.GetUserId();
+
                 using (var cmd = new SqlCommand("Procedure", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@user", 5);
+                    cmd.Parameters.AddWithValue("@userid", "5");
                     con.Open();
 
                     using (var reader = cmd.ExecuteReader())
@@ -36,10 +39,8 @@ namespace MyCards.Controllers
                         while (reader.Read())
                         {
                             // do something with the row
-                            var s1 = reader.GetInt32(0);
-                            var s2 = reader.GetDouble(3);
-
-                            
+                            recommendedIds.Add(reader.GetInt32(0));
+                            var rating = reader.GetDouble(3);
                         }
                     }
                 }
@@ -56,6 +57,7 @@ namespace MyCards.Controllers
             var userRankingList = db.UserRanking.Where(a => a.UserId == curUser).ToList();
 
             List<RestaurantData> addressesList = new List<RestaurantData>();
+            List<RecommendedData> recommended = new List<RecommendedData>();
 
             foreach (Restuarant item in addresses)
             {
@@ -84,7 +86,14 @@ namespace MyCards.Controllers
                     data.ratedByMe = true;
                 }
 
+                data.score = ScoreResturant(item);
+
                 addressesList.Add(data);
+
+                if (recommendedIds.Contains(data.id))
+                {
+                    recommended.Add(new RecommendedData(data.id, item.Name, item.Image));
+                }
             }
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -95,8 +104,16 @@ namespace MyCards.Controllers
 
             //ViewBag.restaurants = addresses;
             ViewBag.restaurants = addressesList;
+            ViewBag.recommended = recommended;
 
             return View();
+        }
+
+        private int ScoreResturant(Restuarant item)
+        {
+            
+
+            return 1;
         }
 
         [HttpGet]
@@ -140,7 +157,7 @@ namespace MyCards.Controllers
                 userRanking.rating = rank;
 
                 db.Entry(userRanking).State = EntityState.Modified;
-            }
+    }
             else
             {
                 UserRanking newUserRanking = new UserRanking();
@@ -149,13 +166,25 @@ namespace MyCards.Controllers
                 newUserRanking.UserId = curUser;
 
                 db.UserRanking.Add(newUserRanking);
-            }
+}
 
-            db.SaveChanges();
-
+public class RecommendedData
+{
+    public RecommendedData(int id, string name, byte[] image)
+    {
+        Id = id;
+        Name = name;
+        if (image != null)
+        {
+            Image = Convert.ToBase64String(image);
         }
     }
+
+    public int Id;
+    public string Name;
+    public string Image;
 }
+
 public class RestaurantData
 {
     public string lat;

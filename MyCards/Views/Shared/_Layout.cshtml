@@ -20,16 +20,10 @@
 </head>
 <body style="display:flex; flex-direction:column;">
     
-        <nav style="display:flex; flex-direction: row-reverse;align-content:center;background-color: #96C670;border-bottom: 1px solid rgb(0, 0, 0);">
-            <img style="height: 45px;" src="..\Images\logo_temp.PNG" />
-            
-            <div id="links">
-                @Html.ActionLink("Home", "Index", "Home")
-                @Html.ActionLink("About", "About", "Home")
-                @Html.ActionLink("Contact", "Contact", "Home")
-            </div>
-            @Html.Partial("_LoginPartial")
-        </nav>
+    <nav style="justify-content:space-between;display:flex; flex-direction: row-reverse;align-content:center;background-color: #96C670;border-bottom: 1px inset #689831;">          
+        <img style="height: 45px;" src="..\Images\logo_temp.PNG" />
+        @Html.Partial("_LoginPartial")
+    </nav>
     
     <div style="height:100%;">
         @RenderBody()

@@ -13,7 +13,6 @@ var initMap = function () {
 
     map = new google.maps.Map(mapElement, mapOptions);
     
-
     for (var i = 0; i < restaurants.length; i++) {
         var myLatLng = new Object();
 
@@ -123,11 +122,11 @@ var listListen = function () {
 
         // Check if not the "been" btn
         if ( (clickedId != 'beenGreen')  && (clickedId != 'beenGrey') ){
-            var id = $(this).find('.hidden-id').attr('value');
-            var marker = findMarkerById(id);
-            var infoWindow = marker.info;
+        var id = $(this).find('.hidden-id').attr('value');
+        var marker = findMarkerById(id);
+        var infoWindow = marker.info;
 
-            chooseMarker(marker.marker, marker.info);
+        chooseMarker(marker.marker, marker.info);
         }
     });
 };
@@ -186,6 +185,15 @@ var filtersChanged = function () {
     });
 };
 
+var recommendedClick = function () {
+    $(".recommended-items").click(function () {
+        var id = $(this).children(".recommended-ids.hidden").text();
+        var marker = findMarkerById(id);
+        var infoWindow = marker.info;
+        chooseMarker(marker.marker, marker.info);
+    });
+};
+
 var selectRanking = function () {
     $('.inputStar').on('rating.change', function (event, value, caption) {
         console.log(value);
@@ -198,5 +206,6 @@ $(document).ready(function () {
     listListen();
     searchKeyup();
     filtersChanged();
+    recommendedClick();
     selectRanking();
 });
