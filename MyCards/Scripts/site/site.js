@@ -180,9 +180,19 @@ var filtersChanged = function () {
     });
 };
 
+var recommendedClick = function () {
+    $(".recommended-items").click(function () {
+        var id = $(this).children(".recommended-ids.hidden").text();
+        var marker = findMarkerById(id);
+        var infoWindow = marker.info;
+        chooseMarker(marker.marker, marker.info);
+    });
+};
+
 $(document).ready(function () {
     //initMap();
     listListen();
     searchKeyup();
     filtersChanged();
+    recommendedClick();
 });

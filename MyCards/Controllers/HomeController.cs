@@ -72,7 +72,7 @@ namespace MyCards.Controllers
 
                 if (recommendedIds.Contains(data.id))
                 {
-                    recommended.Add(new RecommendedData(item.Name, item.Image));
+                    recommended.Add(new RecommendedData(data.id, item.Name, item.Image));
                 }
             }
 
@@ -125,8 +125,9 @@ namespace MyCards.Controllers
 
 public class RecommendedData
 {
-    public RecommendedData(string name, byte[] image)
+    public RecommendedData(int id, string name, byte[] image)
     {
+        Id = id;
         Name = name;
         if (image != null)
         {
@@ -134,6 +135,7 @@ public class RecommendedData
         }
     }
 
+    public int Id;
     public string Name;
     public string Image;
 }

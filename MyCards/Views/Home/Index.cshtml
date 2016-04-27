@@ -4,13 +4,17 @@
 <div style="display: flex; justify-content: flex-start;align-content:center;">
     
     <div id="filters" style="order:1;width: 10%;">
-       <h5>מומלצים עבורך</h5>
+        <h5>מומלצים עבורך</h5>
+        <h4>לפי דירוגים קודמים</h4>
         <ul>
             @foreach (var item in ViewBag.recommended)
             {
                 <li>
                     <label>@item.Name</label>
-                    <img src="data:image/png;base64,@item.Image"/>
+                    <a href="#" class="recommended-items">
+                    <span class="recommended-ids hidden">@item.Id</span>
+                        <img src="data:image/png;base64,@item.Image"/>
+                    </a>
                 </li>
             }
         </ul>
