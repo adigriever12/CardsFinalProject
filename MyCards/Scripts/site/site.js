@@ -71,6 +71,7 @@ var chooseMarker = function (marker, infoWindow) {
 var addMarker = function (myLatLng, restaurant) {
 
     var accessability = restaurant.handicapAccessibility ? "קיימת" : "לא קיימת";
+    var kosher = restaurant.kosher != "" ? "<p><label>כשרות : </label> " + restaurant.kosher + "</p>" : "";
 
     var content = "<h4>" + restaurant.name + "</h4>" +
         "<p><label>שעות פתיחה : </label> " + restaurant.openingHours + "</p>" +
@@ -78,8 +79,9 @@ var addMarker = function (myLatLng, restaurant) {
        // "<p><img src='data:image/png;base64," + restaurant.image + "' alt='Red dot'></p>" + 
         "<p><label>סוג מטבח : </label> " + restaurant.cuisine + "</p>" +
         "<p><label>קטגוריה : </label> " + restaurant.category + "</p>" +
-        "<p><label>כשרות : </label> " + restaurant.kosher + "</p>" + // TODO : check if not empty
+        kosher +
         "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
+        "<p><label>כתובת : </label> " + restaurant.address + "</p>" +
         "<p><label>נגישות : </label> " + accessability + "</p>"; // TODO
 
     var infoWindow = new google.maps.InfoWindow({
