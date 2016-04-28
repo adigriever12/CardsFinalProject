@@ -8,6 +8,14 @@
     border: solid 1px #c3c3c3;
 }
 
+#nav-header label.btn.btn-default.active {
+    background-color: #BECEB0;
+}
+
+#nav-header label.btn.btn-default {
+    background-color: #E0F3D1;
+}
+
 .dropdown-menu li {
     text-align: center;
 }

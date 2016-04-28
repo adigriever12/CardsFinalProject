@@ -20,8 +20,18 @@
 </head>
 <body style="display:flex; flex-direction:column;">
     
-    <nav style="justify-content:space-between;display:flex; flex-direction: row-reverse;align-content:center;background-color: #96C670;border-bottom: 1px inset #689831;">          
+    <nav id="nav-header" style="justify-content:space-between;display:flex; flex-direction: row-reverse;align-items:center;background-color: #96C670;border-bottom: 1px inset #689831;">          
         <img style="height: 45px;" src="..\Images\logo_temp.PNG" />
+
+ <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default">
+                <input type="radio" name="year" value="2011">כתובת
+            </label>
+            <label class="btn btn-default active">
+                <input type="radio" name="year" value="2013" checked="">מיקום נוכחי
+            </label>
+        </div>      
+
         @Html.Partial("_LoginPartial")
     </nav>
     
