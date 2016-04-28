@@ -226,4 +226,11 @@ $(document).ready(function () {
     filtersChanged();
     recommendedClick();
     selectRanking();
+
+
+
+    $('#test').click(function () {
+        $("#testdiv").load("Home/_List");
+    });
+
 });

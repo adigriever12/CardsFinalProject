@@ -24,7 +24,7 @@ namespace MyCards.Controllers
         {
             List<int> recommendedIds = new List<int>();
 
-            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            /*using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 string userid = User.Identity.GetUserId();
 
@@ -44,7 +44,7 @@ namespace MyCards.Controllers
                         }
                     }
                 }
-            }
+            }*/
 
             var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
 
@@ -190,6 +190,11 @@ namespace MyCards.Controllers
             // Return new average
             double rankingAvg = db.UserRanking.Where(a => a.RestuarantId == restuarantId).Average(b => b.rating);
             return Convert.ToInt32(Math.Floor(rankingAvg));
+        }
+
+        public ActionResult _List()
+        {
+            return PartialView();
         }
     }
     public class RecommendedData
