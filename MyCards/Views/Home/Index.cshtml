@@ -41,25 +41,26 @@
                 <a class="list-group-item" href="#" >
                     <span class="item-name">@item.name</span>
                     <div class="dropdown" style="float:left;">
+
                         @if (@item.ratedByMe == true)
                         {
-                            <span id="beenGreen" class="glyphicon glyphicon-ok been green dropdown-toggle" data-toggle="dropdown"></span>
+                            <span class="glyphicon glyphicon-ok been green dropdown-toggle" data-toggle="dropdown"></span>
                         }
                         else
                         {
-                            <span id="beenGrey"class="glyphicon glyphicon-ok been grey dropdown-toggle" data-toggle="dropdown"></span>
+                            <span class="glyphicon glyphicon-ok been grey dropdown-toggle" data-toggle="dropdown"></span>
                         }
                         
                         <ul class="dropdown-menu">
                             <li style="direction:ltr;">
-                            <input class="rating rating-loading inputStar" data-min="0" data-max="5" data-step="1" data-size="xxs">
+                            <input class="rating rating-loading inputStar" data-min="0" data-max="5" data-step="1" data-size="xxs" value=@item.myRating>
                             </li>
                            
                         </ul>
                         <br>
                     </div>
                     <br>
-                    <span class="item-name been" style="font-size:10px; direction:ltr;">@item.score/5</span>
+                    <span class="item-name been ratingAvg" style="font-size:10px; direction:ltr;">@item.ratingAvg/5</span>
                     
                     <span style="font-size:10px">
                         @item.address
