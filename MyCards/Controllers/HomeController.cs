@@ -19,12 +19,12 @@ namespace MyCards.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        List<RestaurantData> addressesList;
         public ActionResult Index(string currentLocation)
         {
             List<int> recommendedIds = new List<int>();
-
-            /*using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            addressesList = new List<RestaurantData>();
+            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 string userid = User.Identity.GetUserId();
 
@@ -44,7 +44,7 @@ namespace MyCards.Controllers
                         }
                     }
                 }
-            }*/
+            }
 
             var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
 
@@ -57,7 +57,7 @@ namespace MyCards.Controllers
                     RestuarantId = g.Key.RestuarantId
                 }).ToList();
 
-            List<RestaurantData> addressesList = new List<RestaurantData>();
+            
             List<RecommendedData> recommended = new List<RecommendedData>();
 
             foreach (Restuarant item in addresses)
@@ -192,8 +192,10 @@ namespace MyCards.Controllers
             return Convert.ToInt32(Math.Floor(rankingAvg));
         }
 
-        public ActionResult _List()
-        {
+        public ActionResult _List(string lat, string lng)
+         {
+            ViewBag.restaurants = addressesList;
+
             return PartialView();
         }
     }

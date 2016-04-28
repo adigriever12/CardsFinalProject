@@ -1,6 +1,8 @@
 ﻿var map;
 var markers = [];
 
+var currentLocation;
+
 var initMap = function () {
 
     var restaurants = $("#mapAddresses").data("value");
@@ -26,6 +28,7 @@ var initMap = function () {
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
+            $("#lists").load("Home/_List", { lat: position.coords.latitude, lng: position.coords.longitude });
             initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             map.setCenter(initialLocation);
             var marker = new google.maps.Marker({
@@ -227,7 +230,7 @@ $(document).ready(function () {
     recommendedClick();
     selectRanking();
 
-
+    
 
     $('#test').click(function () {
         $("#testdiv").load("Home/_List");

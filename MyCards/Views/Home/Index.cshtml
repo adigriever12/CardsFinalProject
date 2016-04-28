@@ -35,52 +35,8 @@
             </ul>
         </div>
 
-        <div id="test1">
-            <button id="test" class="btn btn-primary" type="button">נסיון</button>
-            <div id="testdiv">
-                @Html.Partial("_List")
-            </div>
-        </div>
-
-
-        <div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
-            @foreach (var item in ViewBag.restaurants)
-            {
-                <a class="list-group-item" href="#" >
-                    <span class="item-name">@item.name</span>
-                    <div class="dropdown" style="float:left;">
-
-                        @if (@item.ratedByMe == true)
-                        {
-                            <span class="glyphicon glyphicon-ok been green dropdown-toggle" data-toggle="dropdown"></span>
-                        }
-                        else
-                        {
-                            <span class="glyphicon glyphicon-ok been grey dropdown-toggle" data-toggle="dropdown"></span>
-                        }
-                        
-                        <ul class="dropdown-menu">
-                            <li style="direction:ltr;">
-                            <input class="rating rating-loading inputStar" data-min="0" data-max="5" data-step="1" data-size="xxs" value=@item.myRating>
-                            </li>
-                           
-                        </ul>
-                        <br>
-                    </div>
-                    <br>
-                    <span class="item-name been ratingAvg" style="font-size:10px; direction:ltr;">@item.ratingAvg/5</span>
-                    
-                    <span style="font-size:10px">
-                        @item.address
-                    </span>
-                   
-                    <span class="hidden-id" type="hidden"  value="@item.id"> </span>
-
-                    <span class="hidden-kosher" type="hidden"  value="@item.kosher"> </span>
-                    <span class="hidden-accessibility" type="hidden"  value="@item.handicapAccessibility.ToString()"> </span>
-                </a>
-            }
-        </div>
+        
+        
     </div>
 
     <div id="map" style="width: 70%; order:3;">
