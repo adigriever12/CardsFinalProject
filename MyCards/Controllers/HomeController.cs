@@ -19,11 +19,101 @@ namespace MyCards.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        List<RestaurantData> addressesList;
+
         public ActionResult Index(string currentLocation)
         {
+            trymethod();
+
+            return View();
+        }
+
+        private void trymethod()
+        {
+            List<int> recommendedIds = SlopeOneCalcDB();
+
+            var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
+
+            List<RestaurantData> addressesList = new List<RestaurantData>();
+            List<RecommendedData> recommended = new List<RecommendedData>();
+
+            foreach (Restuarant item in addresses)
+            {
+                RestaurantData data = new RestaurantData();
+                data.id = item.RestuarantId;
+                data.lat = item.Location.lat;
+                data.lng = item.Location.lng;
+                data.name = item.Name;
+                data.openingHours = item.OpeningHours;
+                data.description = item.Description;
+                data.cuisine = item.Cuisine.Name;
+                data.category = item.Category.Name;
+                data.kosher = item.Kosher;
+                data.phone = item.Phone;
+                data.handicapAccessibility = item.HandicapAccessibility;
+                data.score = item.Score;
+                data.address = item.Location.Address;
+                Ranking(item, data);
+                data.score = ScoreResturant(item);
+
+                addressesList.Add(data);
+
+                if (recommendedIds.Contains(data.id))
+                {
+                    recommended.Add(new RecommendedData(data.id, item.Name, item.Image));
+                }
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            // serializer.MaxJsonLength = int.MaxValue;
+            string addressesString = serializer.Serialize(addressesList);
+
+            ViewBag.restaurantsData = addressesString;
+
+            //ViewBag.restaurants = addresses;
+            ViewBag.restaurants = addressesList;
+            ViewBag.recommended = recommended;
+        }
+
+        private void Ranking(Restuarant item, RestaurantData data)
+        {
+            string curUser = User.Identity.GetUserId();
+            var userRankingList = db.UserRanking.Where(a => a.UserId == curUser).ToList();
+            var rankingAvg = db.UserRanking.GroupBy(t => new { RestuarantId = t.RestuarantId })
+                .Select(g => new
+                {
+                    Average = g.Average(p => p.rating),
+                    RestuarantId = g.Key.RestuarantId
+                }).ToList();
+
+            // If i ranked
+            UserRanking findIfRank = userRankingList.Find(t => t.RestuarantId == item.RestuarantId);
+            if (findIfRank == null)
+            {
+                data.ratedByMe = false;
+                data.myRating = 0;
+            }
+            else
+            {
+                data.ratedByMe = true;
+                data.myRating = Convert.ToInt32(Math.Floor(findIfRank.rating)); // TODO : check if we need rating to be double
+            }
+
+            // Average ranking
+            var findAvg = rankingAvg.Find(t => t.RestuarantId == item.RestuarantId);
+            if (findAvg == null)
+            {
+                data.ratingAvg = 0;
+            }
+            else
+            {
+                data.ratingAvg = Convert.ToInt32(Math.Floor(findAvg.Average));
+            }
+        }
+
+        private List<int> SlopeOneCalcDB()
+        {
             List<int> recommendedIds = new List<int>();
-            addressesList = new List<RestaurantData>();
+
             using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 string userid = User.Identity.GetUserId();
@@ -46,84 +136,7 @@ namespace MyCards.Controllers
                 }
             }
 
-            var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
-
-            string curUser = User.Identity.GetUserId();
-            var userRankingList = db.UserRanking.Where(a => a.UserId == curUser).ToList();
-            var rankingAvg = db.UserRanking.GroupBy(t => new { RestuarantId = t.RestuarantId })
-                .Select(g => new
-                {
-                    Average = g.Average(p => p.rating),
-                    RestuarantId = g.Key.RestuarantId
-                }).ToList();
-
-            
-            List<RecommendedData> recommended = new List<RecommendedData>();
-
-            foreach (Restuarant item in addresses)
-            {
-                RestaurantData data = new RestaurantData();
-                data.id = item.RestuarantId;
-                data.lat = item.Location.lat;
-                data.lng = item.Location.lng;
-                data.name = item.Name;
-                data.openingHours = item.OpeningHours;
-                data.description = item.Description;
-                data.cuisine = item.Cuisine.Name;
-                data.category = item.Category.Name;
-                data.kosher = item.Kosher;
-                data.phone = item.Phone;
-                data.handicapAccessibility = item.HandicapAccessibility;
-                data.score = item.Score;
-                data.address = item.Location.Address;
-
-                // If i ranked
-                var findIfRank = userRankingList.Find(t => t.RestuarantId == item.RestuarantId);
-                if (findIfRank == null)
-                {
-                    data.ratedByMe = false;
-                    data.myRating = 0;
-                }
-                else
-                {
-                    data.ratedByMe = true;
-                    data.myRating = Convert.ToInt32(Math.Floor(findIfRank.rating)); // TODO : check if we need rating to be double
-                }
-
-                // Average ranking
-                var findAvg = rankingAvg.Find(t => t.RestuarantId == item.RestuarantId);
-                if (findAvg == null)
-                {
-                    data.ratingAvg = 0;
-                }
-                else
-                {
-                    data.ratingAvg = Convert.ToInt32(Math.Floor(findAvg.Average));
-                }
-
-
-
-                data.score = ScoreResturant(item);
-
-                addressesList.Add(data);
-
-                if (recommendedIds.Contains(data.id))
-                {
-                    recommended.Add(new RecommendedData(data.id, item.Name, item.Image));
-                }
-            }
-
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            // serializer.MaxJsonLength = int.MaxValue;
-            string addressesString = serializer.Serialize(addressesList);
-
-            ViewBag.restaurantsData = addressesString;
-
-            //ViewBag.restaurants = addresses;
-            ViewBag.restaurants = addressesList;
-            ViewBag.recommended = recommended;
-
-            return View();
+            return recommendedIds;
         }
 
         private int ScoreResturant(Restuarant item)
@@ -193,8 +206,8 @@ namespace MyCards.Controllers
         }
 
         public ActionResult _List(string lat, string lng)
-         {
-            ViewBag.restaurants = addressesList;
+        {
+            trymethod();
 
             return PartialView();
         }
