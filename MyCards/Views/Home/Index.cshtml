@@ -35,6 +35,14 @@
             </ul>
         </div>
 
+        <div id="test1">
+            <button id="test" class="btn btn-primary" type="button">נסיון</button>
+            <div id="testdiv">
+                @Html.Partial("_List")
+            </div>
+        </div>
+
+
         <div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
             @foreach (var item in ViewBag.restaurants)
             {
