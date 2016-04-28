@@ -50,6 +50,12 @@ namespace MyCards.Controllers
 
             string curUser = User.Identity.GetUserId();
             var userRankingList = db.UserRanking.Where(a => a.UserId == curUser).ToList();
+            var rankingAvg = db.UserRanking.GroupBy(t => new { RestuarantId = t.RestuarantId })
+                .Select(g => new
+                {
+                    Average = g.Average(p => p.rating),
+                    RestuarantId = g.Key.RestuarantId
+                }).ToList();
 
             List<RestaurantData> addressesList = new List<RestaurantData>();
             List<RecommendedData> recommended = new List<RecommendedData>();
@@ -71,15 +77,31 @@ namespace MyCards.Controllers
                 data.score = item.Score;
                 data.address = item.Location.Address;
 
+                // If i ranked
                 var findIfRank = userRankingList.Find(t => t.RestuarantId == item.RestuarantId);
                 if (findIfRank == null)
                 {
                     data.ratedByMe = false;
+                    data.myRating = 0;
                 }
                 else
                 {
                     data.ratedByMe = true;
+                    data.myRating = Convert.ToInt32(Math.Floor(findIfRank.rating)); // TODO : check if we need rating to be double
                 }
+
+                // Average ranking
+                var findAvg = rankingAvg.Find(t => t.RestuarantId == item.RestuarantId);
+                if (findAvg == null)
+                {
+                    data.ratingAvg = 0;
+                }
+                else
+                {
+                    data.ratingAvg = Convert.ToInt32(Math.Floor(findAvg.Average));
+                }
+
+
 
                 data.score = ScoreResturant(item);
 
@@ -140,7 +162,7 @@ namespace MyCards.Controllers
 
 
         [HttpPost]
-        public void UpdateRank(int rank, int restuarantId)
+        public int UpdateRank(int rank, int restuarantId)
         {
             string curUser = User.Identity.GetUserId();
 
@@ -164,6 +186,10 @@ namespace MyCards.Controllers
             }
 
             db.SaveChanges();
+
+            // Return new average
+            double rankingAvg = db.UserRanking.Where(a => a.RestuarantId == restuarantId).Average(b => b.rating);
+            return Convert.ToInt32(Math.Floor(rankingAvg));
         }
     }
     public class RecommendedData
@@ -200,5 +226,7 @@ namespace MyCards.Controllers
         public int score;
         public bool ratedByMe;
         public string address;
+        public int myRating;
+        public int ratingAvg;
     }
 }

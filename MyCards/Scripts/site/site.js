@@ -120,15 +120,16 @@ var findMarkerById = function (id) {
 
 var listListen = function () {
     $(".list-group-item").click(function () {
-        var clickedId = $(event.target)[0].id;
 
-        // Check if not the "been" btn
-        if ( (clickedId != 'beenGreen')  && (clickedId != 'beenGrey') ){
-        var id = $(this).find('.hidden-id').attr('value');
-        var marker = findMarkerById(id);
-        var infoWindow = marker.info;
+        var clickedItem = $(event.target).first();
+        // Check if not the "been" btn then open the details
+        if ((!clickedItem.hasClass('green')) && (!clickedItem.hasClass('grey')))
+        {
+            var id = $(this).find('.hidden-id').attr('value');
+            var marker = findMarkerById(id);
+            var infoWindow = marker.info;
 
-        chooseMarker(marker.marker, marker.info);
+            chooseMarker(marker.marker, marker.info);
         }
     });
 };
@@ -198,8 +199,23 @@ var recommendedClick = function () {
 
 var selectRanking = function () {
     $('.inputStar').on('rating.change', function (event, value, caption) {
-        console.log(value);
-        $.post("/Home/UpdateRank", { rank: value, restuarantId: $(this).closest("a").children(".hidden-id").attr('value') });
+
+        var ratingverageText = $(this).closest("a").children(".ratingAvg");
+        
+        // Save ranking in db
+        $.post("/Home/UpdateRank", { rank: value, restuarantId: $(this).closest("a").children(".hidden-id").attr('value') },
+            function (data) {
+                ratingverageText[0].innerHTML = data + "/5";
+                });
+
+        // Change been color to green
+        var beenBtn = $(this).closest(".dropdown").children(".glyphicon-ok");
+        beenBtn.removeClass("grey");
+        beenBtn.addClass("green");
+
+        // Close dropdown
+        $(this).closest(".dropdown").removeClass("open");
+        
     });
 };
 
