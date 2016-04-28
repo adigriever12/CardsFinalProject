@@ -30,6 +30,14 @@ namespace MyCards.Controllers
         private void trymethod()
         {
             List<int> recommendedIds = SlopeOneCalcDB();
+            string curUser = User.Identity.GetUserId();
+            var userRankingList = db.UserRanking.Where(a => a.UserId == curUser).ToList();
+            var rankingAvg = db.UserRanking.GroupBy(t => new { RestuarantId = t.RestuarantId })
+                .Select(g => new
+                {
+                    Average = g.Average(p => p.rating),
+                    RestuarantId = g.Key.RestuarantId
+                }).ToList();
 
             var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
 
@@ -52,8 +60,36 @@ namespace MyCards.Controllers
                 data.handicapAccessibility = item.HandicapAccessibility;
                 data.score = item.Score;
                 data.address = item.Location.Address;
-                Ranking(item, data);
+                
                 data.score = ScoreResturant(item);
+
+                #region Ranking
+
+                // If i ranked
+                UserRanking findIfRank = userRankingList.Find(t => t.RestuarantId == item.RestuarantId);
+                if (findIfRank ==
+                    null)
+                {
+                    data.ratedByMe = false;
+                    data.myRating = 0;
+                }
+                else
+                {
+                    data.ratedByMe = true;
+                    data.myRating = Convert.ToInt32(Math.Floor(findIfRank.rating)); // TODO : check if we need rating to be double
+                }
+
+                // Average ranking
+                var findAvg = rankingAvg.Find(t => t.RestuarantId == item.RestuarantId);
+                if (findAvg == null)
+                {
+                    data.ratingAvg = 0;
+                }
+                else
+                {
+                    data.ratingAvg = Convert.ToInt32(Math.Floor(findAvg.Average));
+                } 
+                #endregion
 
                 addressesList.Add(data);
 
@@ -72,42 +108,6 @@ namespace MyCards.Controllers
             //ViewBag.restaurants = addresses;
             ViewBag.restaurants = addressesList;
             ViewBag.recommended = recommended;
-        }
-
-        private void Ranking(Restuarant item, RestaurantData data)
-        {
-            string curUser = User.Identity.GetUserId();
-            var userRankingList = db.UserRanking.Where(a => a.UserId == curUser).ToList();
-            var rankingAvg = db.UserRanking.GroupBy(t => new { RestuarantId = t.RestuarantId })
-                .Select(g => new
-                {
-                    Average = g.Average(p => p.rating),
-                    RestuarantId = g.Key.RestuarantId
-                }).ToList();
-
-            // If i ranked
-            UserRanking findIfRank = userRankingList.Find(t => t.RestuarantId == item.RestuarantId);
-            if (findIfRank == null)
-            {
-                data.ratedByMe = false;
-                data.myRating = 0;
-            }
-            else
-            {
-                data.ratedByMe = true;
-                data.myRating = Convert.ToInt32(Math.Floor(findIfRank.rating)); // TODO : check if we need rating to be double
-            }
-
-            // Average ranking
-            var findAvg = rankingAvg.Find(t => t.RestuarantId == item.RestuarantId);
-            if (findAvg == null)
-            {
-                data.ratingAvg = 0;
-            }
-            else
-            {
-                data.ratingAvg = Convert.ToInt32(Math.Floor(findAvg.Average));
-            }
         }
 
         private List<int> SlopeOneCalcDB()
