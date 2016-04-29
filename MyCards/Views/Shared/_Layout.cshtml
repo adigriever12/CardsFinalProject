@@ -23,14 +23,31 @@
     <nav id="nav-header" style="justify-content:space-between;display:flex; flex-direction: row-reverse;align-items:center;background-color: #96C670;border-bottom: 1px inset #689831;">          
         <img style="height: 45px;" src="..\Images\logo_temp.PNG" />
 
-    <div class="btn-group" data-toggle="buttons">
-        <label class="btn btn-default">
-            <input type="radio" name="year" value="2011">כתובת
-        </label>
-        <label class="btn btn-default active">
-            <input type="radio" name="year" value="2013" checked="">מיקום נוכחי
-        </label>
+    <div class="btn-group" role="group">
+        <button style="display:inline-block;border-radius: 25px;" id="clear-location-filter" type="button" class="btn btn-default">X</button>
+    
+        <div class="dropdown" style="display:inline-block;">
+            <button id="address-btn" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">כתובת</button>
+            <ul class="dropdown-menu" style="padding: 5px;">
+                <li style="margin-bottom: 0;">
+                    <input id="location-address-filter" type="text"/>
+                </li>
+            </ul>
+        </div>
+    <button style="display:inline-block;border-bottom-left-radius: 5px;border-top-left-radius: 5px;" id="currentlocation-filter" type="button" class="btn btn-default">מיקום נוכחי</button>
+        
     </div>      
+
+    <div class="dropdown" style="display:inline-block;">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">כרטיסים</button>
+            <ul class="dropdown-menu">
+                <li>
+                    <img src="~/Images/laumi.png" style="height: 51px; width: 104px;"/>
+                    <img src="~/Images/american.jpg" style="height: 51px; width: 104px;"/>
+                    <img src="~/Images/groupon.png" style="height: 51px; width: 104px;"/>
+                </li>
+            </ul>
+        </div>
 
         @Html.Partial("_LoginPartial")
     </nav>

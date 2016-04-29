@@ -2,6 +2,7 @@
 var markers = [];
 
 var currentLocation;
+var geocoder;
 
 var intializeMap = function () {
     var mapElement = document.getElementById('map');
@@ -13,6 +14,7 @@ var intializeMap = function () {
     }
 
     map = new google.maps.Map(mapElement, mapOptions);
+    geocoder = new google.maps.Geocoder();
 }
 
 var intializMarkers = function () {
@@ -35,9 +37,10 @@ var setCurrentLocation = function () {
         navigator.geolocation.getCurrentPosition(function (position) {
 
            
-            $("#load").load("Home/_List", { lat: position.coords.latitude, lng: position.coords.longitude }, function () {
-                intializeMap();
-                intializMarkers();
+            //$("#load").load("Home/_List", { lat: position.coords.latitude, lng: position.coords.longitude }, function () {
+                //intializeMap();
+            //intializMarkers();
+            currentLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
                 initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 map.setCenter(initialLocation);
                 var marker = new google.maps.Marker({
@@ -50,7 +53,7 @@ var setCurrentLocation = function () {
                         scaledSize: new google.maps.Size(50, 50)
                     }
                 });
-            });
+            //});
 
             
 
@@ -64,8 +67,9 @@ var setCurrentLocation = function () {
 };
 
 var initMap = function () {
-    //intializeMap();
+    intializeMap();
     setCurrentLocation();
+    intializMarkers();
 }
 
 var lastInfoWindow;
@@ -142,7 +146,7 @@ var listListen = function () {
 
         var clickedItem = $(event.target).first();
         // Check if not the "been" btn then open the details
-        if ((!clickedItem.hasClass('green')) && (!clickedItem.hasClass('grey')))
+        if ((!clickedItem.hasClass('green')) && (!clickedItem.hasClass('grey')) && (!clickedItem.hasClass('c-rating__item')))
         {
             var id = $(this).find('.hidden-id').attr('value');
             var marker = findMarkerById(id);
@@ -150,6 +154,8 @@ var listListen = function () {
 
             chooseMarker(marker.marker, marker.info);
         }
+
+        $("map").focus();
     });
 };
 
@@ -158,7 +164,7 @@ var searchKeyup = function() {
 
         var searchedContent = $("#searchBox").val().toLowerCase();
 
-        if (searchedContent != "") {
+        //if (searchedContent != "") {
             $.each($(".list-group-item"), function (i, val) {
                 var name = $(this).find('.item-name').text().toLowerCase();
 
@@ -169,7 +175,7 @@ var searchKeyup = function() {
                     $(this).attr('class', 'list-group-item');
                 }
             });
-        }
+        //}
     });
 };
 
@@ -238,10 +244,118 @@ var selectRanking = function () {
     });
 };
 
+var ratings = function () {
+    $(".c-rating").each(function () {
+
+        var self = $(this);
+
+        // callback to run after setting the rating
+        var callback = function (rating) {
+            var ratingverageText = self.closest("a").children(".ratingAvg");
+
+            // Save ranking in db
+            $.post("/Home/UpdateRank", { rank: rating, restuarantId: self.closest("a").children(".hidden-id").attr('value') },
+                function (data) {
+                    ratingverageText[0].innerHTML = data + "/5";
+                });
+
+            // Change been color to green
+            var beenBtn = self.closest(".dropdown").children(".glyphicon-ok");
+            beenBtn.removeClass("grey");
+            beenBtn.addClass("green");
+
+            // Close dropdown
+            self.closest(".dropdown").removeClass("open");
+        };
+
+        // rating instance
+        var myRating = rating($(this)[0], 0, 5, callback);
+    });
+};
+
+var locationFilters = function () {
+
+    $("#location-address-filter").click(function (e) {
+        e.stopPropagation();
+    });
+
+    $("#location-address-filter").keyup(function (e) {
+        // pressed enter
+        if (e.keyCode == 13) {
+
+            geocoder.geocode({ 'address': $("#location-address-filter").val() }, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    
+                    removeMarkersByDistance(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+    });
+
+    $("#currentlocation-filter").click(function () {
+
+        if ($(this).attr('class').indexOf('active') == -1) {
+            removeMarkersByDistance(currentLocation.lat, currentLocation.lng);
+            map.setCenter(currentLocation);
+        } else {
+            makeAllMarkersVisible();
+        }
+    });
+
+    $("#clear-location-filter").click(function () {
+        makeAllMarkersVisible();
+    });
+};
+
+var makeAllMarkersVisible = function () {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].marker.setVisible(true);
+    }
+
+    $.each($(".list-group-item"), function (i, val) {
+        $(this).attr('class', 'list-group-item');
+    });
+};
+
+var removeMarkersByDistance = function (lat, lng) {
+
+    var ids = [];
+
+    for (var i = 0; i < markers.length; i++) {
+        var distance = google.maps.geometry.spherical.computeDistanceBetween(
+        new google.maps.LatLng(markers[i].marker.position.lat(), markers[i].marker.position.lng()),
+        new google.maps.LatLng(lat, lng));
+
+        if (distance / 1000 <= 5) {
+            markers[i].marker.setVisible(true);
+
+            ids.push(markers[i].id);
+        } else {
+            markers[i].marker.setVisible(false);
+        }
+    }
+
+    $.each($(".list-group-item"), function (i, val) {
+        var id = Number($(this).find('.hidden-id').attr('value'));
+
+        if (ids.indexOf(id) == -1) {
+            $(this).attr('class', 'list-group-item hidden');
+        }
+        else {
+            $(this).attr('class', 'list-group-item');
+        }
+    });
+};
+
 $(document).ready(function () {
     listListen();
     searchKeyup();
     filtersChanged();
     recommendedClick();
     selectRanking();
+    ratings();
+    locationFilters();
 });

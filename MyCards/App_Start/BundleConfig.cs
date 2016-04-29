@@ -25,7 +25,8 @@ namespace MyCards
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
-                      "~/Scripts/starRating/star-rating.js"
+                      "~/Scripts/starRating/star-rating.js",
+                       "~/Scripts/site/rating.js"
                       ));
 
             //bundles.Add(new ScriptBundle("~/bundles/gmaps").Include(
@@ -38,7 +39,8 @@ namespace MyCards
                       "~/Content/bootstrap-toggle/bootstrap2-toggle.min.css",
                       "~/Content/starRating/star-rating.css",
                       "~/Content/starRating/theme-krajee-fa.css",
-                      "~/Content/font-awesome.min.css"));
+                      "~/Content/font-awesome.min.css",
+                      "~/Content/rating.css"));
 
             bundles.Add(new StyleBundle("~/Content/bootstrap-toggle").Include(
                       "~/Content/bootstrap-toggle/bootstrap2-toggle.min.js"));

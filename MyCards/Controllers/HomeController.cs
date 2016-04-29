@@ -23,15 +23,10 @@ namespace MyCards.Controllers
 
         public ActionResult Index()
         {
-            return View();
-        }
-
-        private void trymethod(bool calcScore, double lat, double lng)
-        {
             List<int> recommendedIds = SlopeOneCalcDB();
 
             string curUser = User.Identity.GetUserId();
-            var userRankingList = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser).ToList();
+            IQueryable<UserRanking> userRankingList = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser);
             var rankingAvg = db.UserRanking.GroupBy(t => new { RestuarantId = t.Restuarant.RestuarantId })
                 .Select(g => new
                 {
@@ -59,12 +54,12 @@ namespace MyCards.Controllers
                 data.phone = item.Phone;
                 data.handicapAccessibility = item.HandicapAccessibility;
                 //data.score = item.Score;
-                data.address = item.Location.Address;       
+                data.address = item.Location.Address;
 
                 #region Ranking
 
                 // If i ranked
-                UserRanking findIfRank = userRankingList.Find(t => t.Restuarant.RestuarantId == item.RestuarantId);
+                UserRanking findIfRank = userRankingList.ToList().Find(t => t.Restuarant.RestuarantId == item.RestuarantId);
 
                 if (findIfRank == null)
                 {
@@ -73,10 +68,8 @@ namespace MyCards.Controllers
                 }
                 else
                 {
-                    //data.category
-
                     data.ratedByMe = true;
-                    data.myRating = Convert.ToInt32(Math.Floor(findIfRank.Rating)); // TODO : check if we need rating to be double
+                    data.myRating = Convert.ToInt32(Math.Round(findIfRank.Rating)); // TODO : check if we need rating to be double
                 }
 
                 // Average ranking
@@ -87,14 +80,11 @@ namespace MyCards.Controllers
                 }
                 else
                 {
-                    data.ratingAvg = Convert.ToInt32(Math.Floor(findAvg.Average));
+                    data.ratingAvg = Convert.ToInt32(Math.Round(findAvg.Average));
                 }
                 #endregion
 
-                if (calcScore)
-                {
-                    data.score = ScoreResturant(item, lat, lng, data.ratingAvg, userRankingList);
-                }
+                data.score = ScoreResturant(item, 0, 0, data.ratingAvg, userRankingList, data.myRating);
 
                 addressesList.Add(data);
 
@@ -104,6 +94,8 @@ namespace MyCards.Controllers
                 }
             }
 
+            addressesList.Sort((x, y) => y.score.CompareTo(x.score));
+
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             // serializer.MaxJsonLength = int.MaxValue;
             string addressesString = serializer.Serialize(addressesList);
@@ -111,6 +103,8 @@ namespace MyCards.Controllers
             ViewBag.restaurantsJsonMap = addressesString;
             ViewBag.restaurantsList = addressesList;
             ViewBag.recommended = recommended;
+
+            return View();
         }
 
         private List<int> SlopeOneCalcDB()
@@ -142,13 +136,8 @@ namespace MyCards.Controllers
             return recommendedIds;
         }
 
-        private int ScoreResturant(Restuarant item, double lat, double lng, int avgRanking, List<UserRanking> userRankingList)
+        private double ScoreResturant(Restuarant item, double lat, double lng, int avgRanking, IQueryable<UserRanking> userRankingList, int userRating)
         {
-
-            double score = 0;
-
-            string curUser = User.Identity.GetUserId();
-
             GeoCoordinate current = new GeoCoordinate();
             current.Latitude = lat;
             current.Longitude = lng;
@@ -157,13 +146,40 @@ namespace MyCards.Controllers
             restaurant.Latitude = Convert.ToDouble(item.Location.lat);
             restaurant.Longitude = Convert.ToDouble(item.Location.lng);
 
-            double distance = current.GetDistanceTo(restaurant);
+            double distance = 0;// 1 / current.GetDistanceTo(restaurant);
 
+            double categoryGreatness = 0;
 
+            if (userRankingList.Where(x => x.Restuarant.Category.CategoryId == item.Category.CategoryId).Count() > 0)
+            {
+                var results = userRankingList.Include(x => x.Restuarant).GroupBy(y => y.Restuarant.Category).Select(g => new
+                {
+                    count = g.Count(),
+                    category = g.Key.CategoryId
+                }).ToList();
 
-            //score = 50 * distance + 20 * avgRanking + 
+                var r = results.Find(c => c.category == item.Category.CategoryId).count;
 
-            return 1;
+                var visitsCount = userRankingList.Count();
+
+                categoryGreatness = r / visitsCount;
+
+            }
+
+            double badRating = 0;
+
+            if (userRating == 1 || userRating == 2)
+            {
+                badRating = (-1) * (1 / userRating);
+            }
+
+            double result = distance + avgRanking + categoryGreatness + badRating;
+            
+            double normalizeMinMax = Math.Round((result - (-1)) / (7 - (-1)));
+
+            int markerCategoryByScore = Convert.ToInt32(Math.Round(normalizeMinMax * 5));
+
+            return markerCategoryByScore;
         }
 
         [HttpGet]
@@ -179,28 +195,14 @@ namespace MyCards.Controllers
             return "";
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
 
         [HttpPost]
         public int UpdateRank(int rank, int restuarantId)
         {
             string curUser = User.Identity.GetUserId();
 
-            var userRankingList = db.UserRanking.Where(a => a.Restuarant.RestuarantId == restuarantId && a.ApplicationUser.Id == curUser);
-            var t = db.Restuarants.Count();
+            var userRankingList = db.UserRanking.Include(x => x.Restuarant).Where(a => a.Restuarant.RestuarantId == restuarantId && a.ApplicationUser.Id == curUser);
+
             if (userRankingList.Count() > 0)
             {
                 UserRanking userRanking = userRankingList.First();
@@ -212,8 +214,8 @@ namespace MyCards.Controllers
             {
                 UserRanking newUserRanking = new UserRanking();
                 newUserRanking.Rating = rank;
-                newUserRanking.Restuarant.RestuarantId = restuarantId;
-                newUserRanking.ApplicationUser.Id = curUser;
+                newUserRanking.Restuarant = db.Restuarants.Find(restuarantId);
+                newUserRanking.ApplicationUser = db.Users.Find(curUser);
 
                 db.UserRanking.Add(newUserRanking);
             }
@@ -227,7 +229,6 @@ namespace MyCards.Controllers
 
         public ActionResult _List(double lat, double lng)
         {
-            trymethod(true, lat, lng);
 
             return PartialView();
         }
@@ -263,7 +264,7 @@ namespace MyCards.Controllers
         public string kosher;
         public string phone;
         public bool handicapAccessibility;
-        public int score;
+        public double score;
         public bool ratedByMe;
         public string address;
         public int myRating;
