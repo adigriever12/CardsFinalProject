@@ -3,10 +3,9 @@ var markers = [];
 
 var currentLocation;
 
-var initMap = function () {
-
-    var restaurants = $("#mapAddresses").data("value");
+var intializeMap = function () {
     var mapElement = document.getElementById('map');
+
     var mapOptions = {
         zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -14,33 +13,46 @@ var initMap = function () {
     }
 
     map = new google.maps.Map(mapElement, mapOptions);
-    
+}
+
+var intializMarkers = function () {
+    var restaurants = $("#mapAddresses").data("value");
+
     for (var i = 0; i < restaurants.length; i++) {
         var myLatLng = new Object();
 
         myLatLng.lat = parseFloat(restaurants[i].lat);
         myLatLng.lng = parseFloat(restaurants[i].lng);
         addMarker(myLatLng, restaurants[i]);
-
     }
+};
+
+var setCurrentLocation = function () {
     // Set map center to current location
     var initialLocation;
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            $("#lists").load("Home/_List", { lat: position.coords.latitude, lng: position.coords.longitude });
-            initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            map.setCenter(initialLocation);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: initialLocation,
-                title: 'מיקום נוכחי',
-                zIndex: google.maps.Marker.MAX_ZINDEX + 1,
-                icon: {
-                    url: './Images/blue-marker.png',
-                    scaledSize: new google.maps.Size(50, 50)
-                }
+
+           
+            $("#load").load("Home/_List", { lat: position.coords.latitude, lng: position.coords.longitude }, function () {
+                intializeMap();
+                intializMarkers();
+                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(initialLocation);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: initialLocation,
+                    title: 'מיקום נוכחי',
+                    zIndex: google.maps.Marker.MAX_ZINDEX + 1,
+                    icon: {
+                        url: './Images/blue-marker.png',
+                        scaledSize: new google.maps.Size(50, 50)
+                    }
+                });
             });
+
+            
 
         }, function () {
         });
@@ -49,7 +61,11 @@ var initMap = function () {
     else {
         alert("Geolocation service failed.");
     }
+};
 
+var initMap = function () {
+    //intializeMap();
+    setCurrentLocation();
 }
 
 var lastInfoWindow;
@@ -223,17 +239,9 @@ var selectRanking = function () {
 };
 
 $(document).ready(function () {
-    //initMap();
     listListen();
     searchKeyup();
     filtersChanged();
     recommendedClick();
     selectRanking();
-
-    
-
-    $('#test').click(function () {
-        $("#testdiv").load("Home/_List");
-    });
-
 });

@@ -10,15 +10,18 @@ namespace MyCards.Models
 {
     public class UserRanking
     {
+        public int UserRankingId { get; set; }
+
         [Key]
         [Column(Order = 1)]
-        public string UserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         [Key]
         [Column(Order = 2)]
-        public int RestuarantId { get; set; }
+        public Restuarant Restuarant { get; set; }
 
         [DefaultValue(0)]
-        public double rating { get; set; }
+        [Range(0, 5)]
+        public double Rating { get; set; }
     }
 }

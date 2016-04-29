@@ -1,6 +1,44 @@
-﻿<div id="lists">
-<div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
-            @foreach (var item in ViewBag.restaurants)
+﻿
+<div style="display: flex; justify-content: flex-start;align-content:center;">
+    
+
+    <div id="filters" style="order:1;width: 10%;">
+        <h5>מומלצים עבורך</h5>
+        <h4>לפי דירוגים קודמים</h4>
+        <ul>
+            @if (ViewBag.recommended != null)
+            {
+                foreach (var item in ViewBag.recommended)
+                {
+                    <li>
+                        <label>@item.Name</label>
+                        <a href="#" class="recommended-items">
+                        <span class="recommended-ids hidden">@item.Id</span>
+                            <img src="data:image/png;base64,@item.Image"/>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>       
+    </div>
+
+<div id="side" style="width: 20%; order:2;border-left: 1px solid #C9E5AA">
+
+    <input id="searchBox" type="search" class="form-control" placeholder="חיפוש" style="width: 76%;;display: inline-block;">
+            
+    <div class="dropdown" style="display:inline-block;">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">סנן
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><label>נגישות</label><input id="accessibility-toggle" type="checkbox" data-toggle="toggle"/></li>
+            <li><label>כשרות</label><input id="kosher-toggle" type="checkbox" data-toggle="toggle"></li>
+        </ul>
+    </div>
+
+    <div id="lists">
+        <div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
+
+            @foreach (var item in ViewBag.restaurantsList)
             {
                 <a class="list-group-item" href="#" >
                     <span class="item-name">@item.name</span>
@@ -36,5 +74,15 @@
                     <span class="hidden-accessibility" type="hidden"  value="@item.handicapAccessibility.ToString()"> </span>
                 </a>
             }
+        
         </div>
+    </div>
 </div>
+<input type="hidden" id="mapAddresses" data-value="@ViewBag.restaurantsJsonMap" />
+<div id="map" style="width: 70%; order:3;">
+</div>
+
+</div>
+
+
+
