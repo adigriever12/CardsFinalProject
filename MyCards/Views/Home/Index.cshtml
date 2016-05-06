@@ -1,17 +1,91 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<div style="display: flex; justify-content: flex-start;align-content:center;">
+    
+
+    <div id="filters" style="order:1;width: 10%;">
+        <h5>מומלצים עבורך</h5>
+        <h4>לפי דירוגים קודמים</h4>
+        <ul>
+            @foreach (var item in ViewBag.recommended)
+            {
+                <li>
+                    <label>@item.Name</label>
+                    <a href="#" class="recommended-items">
+                    <span class="recommended-ids hidden">@item.Id</span>
+                        <img src="data:image/png;base64,@item.Image"/>
+                    </a>
+                </li>
+            }
+        </ul>       
+    </div>
 
 
+    <div id="side" style="width: 20%; order:2;border-left: 1px solid #C9E5AA">
+
+        <input id="searchBox" type="search" class="form-control" placeholder="חיפוש" style="width: 76%;;display: inline-block;">
+            
+        <div class="dropdown" style="display:inline-block;">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">סנן
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><label>נגישות</label><input id="accessibility-toggle" type="checkbox" data-toggle="toggle"/></li>
+                <li><label>כשרות</label><input id="kosher-toggle" type="checkbox" data-toggle="toggle"></li>
+            </ul>
+        </div>
+
+    <div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
+    @foreach (var item in ViewBag.restaurantsList)
+    {
+        <a class="list-group-item" href="#" >
+            <span class="item-name">@item.name</span>
+            <div class="dropdown" style="float:left;">
+
+                @if (@item.ratedByMe == true)
+                {
+                    <span class="glyphicon glyphicon-ok been green dropdown-toggle" data-toggle="dropdown"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-ok been grey dropdown-toggle" data-toggle="dropdown"></span>
+                }
+                        
+                <ul class="dropdown-menu">
+
+                    <li>
+                        <ul class="c-rating" style="margin-left: 18px; direction: ltr;">
+                            
+                        </ul>
+                    </li>
 
 
-<div id="load">
+                           
+                </ul>
+                <br>
+            </div>
+            <br>
+            <span class="item-name been ratingAvg" style="font-size:10px; direction:ltr;">@item.ratingAvg/5</span>
+                    
+            <span style="font-size:10px">
+                @item.address
+            </span>
+                   
+            <span class="hidden-id" type="hidden"  value="@item.id"> </span>
 
+            <span class="hidden-kosher" type="hidden"  value="@item.kosher"> </span>
+            <span class="hidden-accessibility" type="hidden"  value="@item.handicapAccessibility.ToString()"> </span>
+        </a>
+    }
+    </div>
+        
+    </div>
+
+    <div id="map" style="width: 70%; order:3;">
+    </div>
+    <input type="hidden" id="mapAddresses" data-value="@ViewBag.restaurantsJsonMap" />
 </div>
-
-     
-
 
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/site/site.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhQ4O1dzFHh07ZDQa3k_ECAbO_LDXQZBA&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhQ4O1dzFHh07ZDQa3k_ECAbO_LDXQZBA&callback=initMap&libraries=geometry"></script>
