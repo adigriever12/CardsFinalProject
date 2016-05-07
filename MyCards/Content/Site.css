@@ -16,6 +16,11 @@
     border-left: 1px solid #C9E5AA;
 }
 
+.image_cards{
+    height: 51px;
+    width: 104px;
+}
+
 .dropdown-menu label {
     margin-left: 6px;
 }
