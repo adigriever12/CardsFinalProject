@@ -111,27 +111,27 @@ namespace MyCards.Controllers
         {
             List<int> recommendedIds = new List<int>();
 
-            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
-            {
-                string userid = User.Identity.GetUserId();
+            //using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            //{
+            //    string userid = User.Identity.GetUserId();
 
-                using (var cmd = new SqlCommand("Procedure", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@userid", userid);
-                    con.Open();
+            //    using (var cmd = new SqlCommand("Procedure", con))
+            //    {
+            //        cmd.CommandType = CommandType.StoredProcedure;
+            //        cmd.Parameters.AddWithValue("@userid", userid);
+            //        con.Open();
 
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            // do something with the row
-                            recommendedIds.Add(reader.GetInt32(0));
-                            var rating = reader.GetDouble(3);
-                        }
-                    }
-                }
-            }
+            //        using (var reader = cmd.ExecuteReader())
+            //        {
+            //            while (reader.Read())
+            //            {
+            //                // do something with the row
+            //                recommendedIds.Add(reader.GetInt32(0));
+            //                var rating = reader.GetDouble(3);
+            //            }
+            //        }
+            //    }
+            //}
 
             return recommendedIds;
         }

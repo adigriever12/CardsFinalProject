@@ -1,91 +1,79 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-<div style="display: flex; justify-content: flex-start;align-content:center;">
+@if (!Request.Browser.IsMobileDevice)
+{
+
+    <div style="display: flex; justify-content: flex-start;align-content:center;">
     
-
-    <div id="filters" style="order:1;width: 10%;">
-        <h5>מומלצים עבורך</h5>
-        <h4>לפי דירוגים קודמים</h4>
-        <ul>
-            @foreach (var item in ViewBag.recommended)
-            {
-                <li>
-                    <label>@item.Name</label>
-                    <a href="#" class="recommended-items">
-                    <span class="recommended-ids hidden">@item.Id</span>
-                        <img src="data:image/png;base64,@item.Image"/>
-                    </a>
-                </li>
-            }
-        </ul>       
-    </div>
-
-
-    <div id="side" style="width: 20%; order:2;border-left: 1px solid #C9E5AA">
-
-        <input id="searchBox" type="search" class="form-control" placeholder="חיפוש" style="width: 76%;;display: inline-block;">
-            
-        <div class="dropdown" style="display:inline-block;">
-            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">סנן
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-                <li><label>נגישות</label><input id="accessibility-toggle" type="checkbox" data-toggle="toggle"/></li>
-                <li><label>כשרות</label><input id="kosher-toggle" type="checkbox" data-toggle="toggle"></li>
-            </ul>
+        <div id="filters" style="order:1;width: 10%;">
+          @Html.Partial("_Recommended")
         </div>
 
-    <div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
-    @foreach (var item in ViewBag.restaurantsList)
-    {
-        <a class="list-group-item" href="#" >
-            <span class="item-name">@item.name</span>
-            <div class="dropdown" style="float:left;">
+        <div id="side" style="width: 20%; order:2;border-left: 1px solid #C9E5AA">
+            @Html.Partial("_List")
+        </div>
 
-                @if (@item.ratedByMe == true)
-                {
-                    <span class="glyphicon glyphicon-ok been green dropdown-toggle" data-toggle="dropdown"></span>
-                }
-                else
-                {
-                    <span class="glyphicon glyphicon-ok been grey dropdown-toggle" data-toggle="dropdown"></span>
-                }
-                        
-                <ul class="dropdown-menu">
-
-                    <li>
-                        <ul class="c-rating" style="margin-left: 18px; direction: ltr;">
-                            
-                        </ul>
-                    </li>
-
-
-                           
-                </ul>
-                <br>
-            </div>
-            <br>
-            <span class="item-name been ratingAvg" style="font-size:10px; direction:ltr;">@item.ratingAvg/5</span>
-                    
-            <span style="font-size:10px">
-                @item.address
-            </span>
-                   
-            <span class="hidden-id" type="hidden"  value="@item.id"> </span>
-
-            <span class="hidden-kosher" type="hidden"  value="@item.kosher"> </span>
-            <span class="hidden-accessibility" type="hidden"  value="@item.handicapAccessibility.ToString()"> </span>
-        </a>
+        @Html.Partial("_Map")
+    </div>
     }
-    </div>
-        
+else
+{
+    <div id="sidenav">
+        <div id="side" style="visibility:hidden;" >
+            <ul class="nav nav-tabs">
+                <li class="active"><a class="mDontCls" data-toggle="tab" href='#listTab'>רשימה</a></li>
+                <li class="tab"><a class="mDontCls" data-toggle="tab" href='#recommendedTab'>מומלצים</a></li>
+                <li class="tab"><a class="mDontCls" data-toggle="tab" href='#settingsTab'>הגדרות</a></li>
+            </ul>
+            <div class="tab-content" style="align-content:center; display: flex;">
+                <div id='listTab' class="tab-pane fade in active">
+                    @Html.Partial("_List")
+                </div>
+                <div id='recommendedTab' class="tab-pane fade" style="width: 100%;height: 100%;text-align: center;">
+                   @Html.Partial("_Recommended")
+                </div>
+                <div id='settingsTab' class="tab-pane fade" style="width: 100%;height: 100%;text-align: center;">
+                    @Html.Partial("_LoginPartial")
+                    <hr />
+                    <div id="cards">
+                        <h4>כרטיסים</h4>
+                        <ul>
+                            <li>
+                                <img src="~/Images/laumi.png" style="height: 51px; width: 104px;" />
+                                <img src="~/Images/american.jpg" style="height: 51px; width: 104px;" />
+                                <img src="~/Images/groupon.png" style="height: 51px; width: 104px;" />
+                            </li>
+                        </ul>
+                    </div>
+                    <hr />
+                    <h4>מפה</h4>
+                    <div class="btn-group" role="group">
+                        <button style="display:inline-block;border-radius: 25px;" id="clear-location-filter" type="button" class="btn btn-default">X</button>
+
+                        <div class="dropdown" style="display:inline-block;">
+                            <button id="address-btn" class="btn btn-default dropdown-toggle mDontCls" type="button" data-toggle="dropdown">כתובת</button>
+                            <ul class="dropdown-menu" style="padding: 5px;right: 0;width: 100%;">
+                                <li style="margin-bottom: 0;">
+                                    <input id="location-address-filter" type="text" style="width: 100%;" />
+                                </li>
+                            </ul>
+                        </div>
+                        <button style="display:inline-block;border-bottom-left-radius: 5px;border-top-left-radius: 5px;" id="currentlocation-filter" type="button" class="btn btn-default">מיקום נוכחי</button>
+
+                    </div>  
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="map" style="width: 70%; order:3;">
+    <div id="mainMobile">
+        <span class="mDontCls" id="openNav" onclick="openCloseNav(false)">☰</span>
+        @Html.Partial("_Map")
     </div>
-    <input type="hidden" id="mapAddresses" data-value="@ViewBag.restaurantsJsonMap" />
-</div>
+}
 
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/site/site.js"></script>
+<script src="~/Scripts/site/navMobile.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhQ4O1dzFHh07ZDQa3k_ECAbO_LDXQZBA&callback=initMap&libraries=geometry"></script>
