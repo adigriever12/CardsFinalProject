@@ -254,8 +254,25 @@
     <Compile Include="Migrations\201604291533052_change-rankings-table.Designer.cs">
       <DependentUpon>201604291533052_change-rankings-table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605071419539_add-groupun.cs" />
+    <Compile Include="Migrations\201605071419539_add-groupun.Designer.cs">
+      <DependentUpon>201605071419539_add-groupun.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071421326_add-groupun1.cs" />
+    <Compile Include="Migrations\201605071421326_add-groupun1.Designer.cs">
+      <DependentUpon>201605071421326_add-groupun1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071519438_fix-table-groupun.cs" />
+    <Compile Include="Migrations\201605071519438_fix-table-groupun.Designer.cs">
+      <DependentUpon>201605071519438_fix-table-groupun.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071547249_fix-table-user.cs" />
+    <Compile Include="Migrations\201605071547249_fix-table-user.Designer.cs">
+      <DependentUpon>201605071547249_fix-table-user.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Groupun_Restuarant.cs" />
     <Compile Include="Models\UserRanking.cs" />
     <Compile Include="Models\UserRankingData.cs" />
     <Compile Include="Models\User\AccountViewModels.cs" />
@@ -408,6 +425,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604291533052_change-rankings-table.resx">
       <DependentUpon>201604291533052_change-rankings-table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071419539_add-groupun.resx">
+      <DependentUpon>201605071419539_add-groupun.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071421326_add-groupun1.resx">
+      <DependentUpon>201605071421326_add-groupun1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071519438_fix-table-groupun.resx">
+      <DependentUpon>201605071519438_fix-table-groupun.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071547249_fix-table-user.resx">
+      <DependentUpon>201605071547249_fix-table-user.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

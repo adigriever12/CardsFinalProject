@@ -6,25 +6,33 @@ using System.Web;
 
 namespace MyCards.Models
 {
-    public class Restuarant
+    public class Groupun_Restuarant
     {
-        public int RestuarantId { get; set; }
+        public int Groupun_RestuarantId { get; set; }
         public string Name { get; set; }
 
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
+        [DataType(DataType.MultilineText)]
+        public string CopunDescription { get; set; }
+
         public Location Location { get; set; }
-        public Cuisine Cuisine { get; set; }
 
         public Category Category { get; set; }
 
         public string Kosher { get; set; }
-        public string Phone { get; set; }
-        public bool HandicapAccessibility { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        public string Expiration { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        public string Hours { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        public string PhoneAndContent { get; set; }
+
         public byte[] Image { get; set; }
-        public string OpeningHours { get; set; }
-    
-        public int Score { get; set; }
+        
     }
 }

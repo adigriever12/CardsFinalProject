@@ -9,8 +9,6 @@ namespace MyCards.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
-        public Location HomeLocation { get; set; }
-        public Location WorkLocation { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -34,6 +32,7 @@ namespace MyCards.Models
         }
 
         public DbSet<Restuarant> Restuarants { get; set; }
+        public DbSet<Groupun_Restuarant> Groupun_Restuarants { get; set; }
         public DbSet<Cuisine> Cuisines { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Review> Reviews { get; set; }
