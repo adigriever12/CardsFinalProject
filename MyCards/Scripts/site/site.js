@@ -350,6 +350,17 @@ var removeMarkersByDistance = function (lat, lng) {
     });
 };
 
+var mobileDisplay = function ()
+{
+    // Check if mobile
+    if (document.getElementById('mobile') != null)
+    {
+        $('#side').css('visibility', 'visible');
+        $('#map').css('height', window.innerHeight + 'px');
+        $('#map').css('width', window.innerWidth + 'px');
+        $('#map').css('order', '');
+    }
+}
 $(document).ready(function () {
     listListen();
     searchKeyup();
@@ -358,4 +369,7 @@ $(document).ready(function () {
     selectRanking();
     ratings();
     locationFilters();
+
+    mobileDisplay();
+
 });

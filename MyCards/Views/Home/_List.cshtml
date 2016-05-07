@@ -1,3 +1,54 @@
-﻿<div id="lists">
+﻿<input id="searchBox" type="search" class="form-control mDontCls" placeholder="חיפוש" style="width: 76%;display: inline-block;">
 
+<div class="dropdown" style="display:inline-block;">
+    <button class="btn btn-default dropdown-toggle mDontCls" type="button" data-toggle="dropdown">
+        סנן
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li><label class="mDontCls">נגישות</label><input id="accessibility-toggle" type="checkbox" data-toggle="toggle" class="mDontCls"/></li>
+        <li><label class="mDontCls">כשרות</label><input id="kosher-toggle" type="checkbox" data-toggle="toggle" class="mDontCls"></li>
+    </ul>
+</div>
+
+<div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
+    @foreach (var item in ViewBag.restaurantsList)
+    {
+        <a class="list-group-item" href="#">
+            <span class="item-name">@item.name</span>
+            <div class="dropdown" style="float:left;">
+
+                @if (@item.ratedByMe == true)
+                {
+                    <span class="glyphicon glyphicon-ok been green dropdown-toggle mDontCls" data-toggle="dropdown"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-ok been grey dropdown-toggle mDontCls" data-toggle="dropdown"></span>
+                }
+
+                <ul class="dropdown-menu">
+
+                    <li>
+                        <ul class="c-rating mDontCls" style="margin-left: 18px; direction: ltr;"></ul>
+                    </li>
+
+
+
+                </ul>
+                <br>
+            </div>
+            <br>
+            <span class="item-name been ratingAvg" style="font-size:10px; direction:ltr;">@item.ratingAvg/5</span>
+
+            <span style="font-size:10px">
+                @item.address
+            </span>
+
+            <span class="hidden-id" type="hidden" value="@item.id"> </span>
+
+            <span class="hidden-kosher" type="hidden" value="@item.kosher"> </span>
+            <span class="hidden-accessibility" type="hidden" value="@item.handicapAccessibility.ToString()"> </span>
+        </a>
+    }
 </div>
