@@ -49,7 +49,7 @@ var setCurrentLocation = function () {
                     title: 'מיקום נוכחי',
                     zIndex: google.maps.Marker.MAX_ZINDEX + 1,
                     icon: {
-                        url: './Images/blue-marker.png',
+                        url: '../Images/blue-marker.png',
                         scaledSize: new google.maps.Size(50, 50)
                     }
                 });
@@ -90,23 +90,49 @@ var chooseMarker = function (marker, infoWindow) {
 
     infoWindow.open(map, marker);
 };
-
-var addMarker = function (myLatLng, restaurant) {
+var markerContent = function (restaurant) {
 
     var accessability = restaurant.handicapAccessibility ? "קיימת" : "לא קיימת";
     var kosher = restaurant.kosher != "" ? "<p><label>כשרות : </label> " + restaurant.kosher + "</p>" : "";
 
-    var content = "<h4>" + restaurant.name + "</h4>" +
+    var content = "";
+
+    // Check card
+    if (window.location.href.search('Groupon') != -1)
+    {
+        content = "<h4>" + restaurant.name + "</h4>" +
         "<p><label>שעות פתיחה : </label> " + restaurant.openingHours + "</p>" +
         "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
-       // "<p><img src='data:image/png;base64," + restaurant.image + "' alt='Red dot'></p>" + 
-        "<p><label>סוג מטבח : </label> " + restaurant.cuisine + "</p>" +
+        "<p><label>תיאור קופון : </label> " + restaurant.copunDescription + "</p>" +
         "<p><label>קטגוריה : </label> " + restaurant.category + "</p>" +
         kosher +
         "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
         "<p><label>כתובת : </label> " + restaurant.address + "</p>" +
-        "<p><label>נגישות : </label> " + accessability + "</p>"; // TODO
+        "<p><label>הגבלות : </label> " + restaurant.expiration + "</p>";
+    }
+    else if (window.location.href.search('American') != -1) {
 
+    }
+    else if (window.location.href.search('Leumi') != -1) {
+
+    }
+    else {
+        content = "<h4>" + restaurant.name + "</h4>" +
+                  "<p><label>שעות פתיחה : </label> " + restaurant.openingHours + "</p>" +
+                  "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
+                  "<p><label>סוג מטבח : </label> " + restaurant.cuisine + "</p>" +
+                  "<p><label>קטגוריה : </label> " + restaurant.category + "</p>" +
+                  kosher +
+                  "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
+                  "<p><label>כתובת : </label> " + restaurant.address + "</p>" +
+                  "<p><label>נגישות : </label> " + accessability + "</p>";
+    }
+    return content;
+}
+var addMarker = function (myLatLng, restaurant) {
+
+    var content = markerContent(restaurant);
+    
     var infoWindow = new google.maps.InfoWindow({
         content: content
     });
@@ -117,7 +143,7 @@ var addMarker = function (myLatLng, restaurant) {
         position: myLatLng,
         title: restaurant.name,
         icon: {
-            url: './Images/' + restaurant.score + '.png',
+            url: '../Images/' + restaurant.score + '.png',
             //scaledSize: new google.maps.Size(50, 50)
         }
     });

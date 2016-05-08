@@ -41,9 +41,11 @@
         <div class="dropdown" style="display:inline-block;">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">כרטיסים</button>
             <ul class="dropdown-menu">
-                <li><a href="#"><img class="image_cards" src="~/Images/laumi.jpg"/></a></li>
-                <li><a href="#"><img class="image_cards" src="~/Images/american.png"/></a></li>
-                <li><a href="#"><img class="image_cards" src="~/Images/groupon.png"/></a></li>
+                 
+                <li><a href=@Url.Action("Index", "Home")><img class="image_cards" src="~/Images/hever.jpg"/></a></li>
+                <li><a href=@Url.Action("Leumi", "Home")><img class="image_cards" src="~/Images/laumi.png" /></a></li>
+                <li><a href=@Url.Action("American", "Home")><img class="image_cards" src="~/Images/american.jpg"/></a></li>
+                <li><a href=@Url.Action("Groupon", "Home")><img class="image_cards" src="~/Images/groupon.png"/></a></li>
             </ul>
         </div>
 
