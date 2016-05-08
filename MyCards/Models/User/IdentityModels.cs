@@ -33,11 +33,13 @@ namespace MyCards.Models
 
         public DbSet<Restuarant> Restuarants { get; set; }
         public DbSet<Groupun_Restuarant> Groupun_Restuarants { get; set; }
+        public DbSet<Laumi_Restuarant> Laumi_Restuarants { get; set; }
         public DbSet<Cuisine> Cuisines { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<VisitHistory> VisitHistories { get; set; }
         public DbSet<UserRankingData> UserRankingData { get; set; }
         public DbSet<UserRanking> UserRanking { get; set; }
+        
     }
 }
