@@ -90,44 +90,45 @@ var chooseMarker = function (marker, infoWindow) {
 
     infoWindow.open(map, marker);
 };
+var createContentP = function (text, value) {
+    return value != "" ? "<p><label>" + text +" : </label> " + value + "</p>" : "";
+}
 var markerContent = function (restaurant) {
 
     var accessability = restaurant.handicapAccessibility ? "קיימת" : "לא קיימת";
-    var kosher = restaurant.kosher != "" ? "<p><label>כשרות : </label> " + restaurant.kosher + "</p>" : "";
-
     var content = "";
 
     // Check card
     if (window.location.href.search('Groupon') != -1) {
         content = "<h4>" + restaurant.name + "</h4>" +
-                  "<p><label>שעות פתיחה : </label> " + restaurant.openingHours + "</p>" +
-                  "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
-                  "<p><label>תיאור קופון : </label> " + restaurant.copunDescription + "</p>" +
-                  "<p><label>קטגוריה : </label> " + restaurant.category + "</p>" +
-                  kosher +
-                  "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
-                  "<p><label>כתובת : </label> " + restaurant.address + "</p>" +
-                  "<p><label>הגבלות : </label> " + restaurant.expiration + "</p>";
+                  createContentP("שעות פתיחה", restaurant.openingHours) +
+                  createContentP("תיאור", restaurant.description) +
+                  createContentP("תיאור קופון", restaurant.copunDescription) +
+                  createContentP("קטגוריה", restaurant.category) +
+                  createContentP("כשרות", restaurant.kosher) +
+                  createContentP("טלפון", restaurant.phone) +
+                  createContentP("כתובת", restaurant.address) +
+                  createContentP("הגבלות", restaurant.expiration);
     }
     else if (window.location.href.search('American') != -1) {
 
     }
     else if (window.location.href.search('Leumi') != -1) {
         content = "<h4>" + restaurant.name + "</h4>" +
-                  "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
-                  "<p><label>תיאור קופון : </label> " + restaurant.copunDescription + "</p>" +
-                  "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
-                  "<p><label>כתובת : </label> " + restaurant.address + "</p>";
+                  createContentP("תיאור", restaurant.description) +
+                  createContentP("תיאור קופון", restaurant.copunDescription) +
+                  createContentP("טלפון", restaurant.phone) +
+                  createContentP("כתובת", restaurant.address);
     }
     else {
         content = "<h4>" + restaurant.name + "</h4>" +
-                  "<p><label>שעות פתיחה : </label> " + restaurant.openingHours + "</p>" +
-                  "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
-                  "<p><label>סוג מטבח : </label> " + restaurant.cuisine + "</p>" +
-                  "<p><label>קטגוריה : </label> " + restaurant.category + "</p>" +
-                  kosher +
-                  "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
-                  "<p><label>כתובת : </label> " + restaurant.address + "</p>" +
+                  createContentP("שעות פתיחה", restaurant.openingHours) +
+                  createContentP("תיאור", restaurant.description) +
+                  createContentP("סוג מטבח", restaurant.cuisine) +
+                  createContentP("קטגוריה", restaurant.category) +
+                  createContentP("כשרות", restaurant.kosher) +
+                  createContentP("טלפון", restaurant.phone) +
+                  createContentP("כתובת", restaurant.address) +
                   "<p><label>נגישות : </label> " + accessability + "</p>";
     }
     return content;
