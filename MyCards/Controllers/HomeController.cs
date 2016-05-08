@@ -195,6 +195,93 @@ namespace MyCards.Controllers
             return View();
         }
 
+        public ActionResult Leumi()
+        {
+            List<int> recommendedIds = SlopeOneCalcDB();
+
+            string curUser = User.Identity.GetUserId();
+            IQueryable<UserRanking> userRankingList = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser);
+            var rankingAvg = db.UserRanking.GroupBy(t => new { RestuarantId = t.Restuarant.RestuarantId })
+                .Select(g => new
+                {
+                    Average = g.Average(p => p.Rating),
+                    RestuarantId = g.Key.RestuarantId
+                }).ToList();
+
+            var addresses = db.Laumi_Restuarants.Include(a => a.Location).OrderBy(n => n.Name).ToArray();
+
+            List<RestaurantData> addressesList = new List<RestaurantData>();
+            List<RecommendedData> recommended = new List<RecommendedData>();
+
+            foreach (Laumi_Restuarant item in addresses)
+            {
+                RestaurantData data = new RestaurantData();
+                data.id = item.Laumi_RestuarantId;
+                data.lat = item.Location.lat;
+                data.lng = item.Location.lng;
+                data.name = item.Name;
+                data.description = item.Description;
+                data.copunDescription = item.Perks;
+                data.phone = item.Phone;
+                data.address = item.Location.Address;
+
+                #region Ranking
+
+                // If i ranked
+
+                UserRanking findIfRank = null;
+                //TODO : fix this and delete the line above
+                // UserRanking findIfRank = userRankingList.ToList().Find(t => t.Restuarant.RestuarantId == item.Groupun_RestuarantId);
+
+                if (findIfRank == null)
+                {
+                    data.ratedByMe = false;
+                    data.myRating = 0;
+                }
+                else
+                {
+                    data.ratedByMe = true;
+                    data.myRating = Convert.ToInt32(Math.Round(findIfRank.Rating)); // TODO : check if we need rating to be double
+                }
+
+                // Average ranking
+                var findAvg = rankingAvg.Find(t => t.RestuarantId == item.Laumi_RestuarantId);
+                if (findAvg == null)
+                {
+                    data.ratingAvg = 0;
+                }
+                else
+                {
+                    data.ratingAvg = Convert.ToInt32(Math.Round(findAvg.Average));
+                }
+                #endregion
+
+                Category category = new Category();
+                category.CategoryId = 0;
+
+                data.score = ScoreResturant(item.Location, category, 0, 0, data.ratingAvg, userRankingList, data.myRating);
+
+                addressesList.Add(data);
+
+                if (recommendedIds.Contains(data.id))
+                {
+                    recommended.Add(new RecommendedData(data.id, item.Name, item.Image));
+                }
+            }
+
+            addressesList.Sort((x, y) => y.score.CompareTo(x.score));
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            // serializer.MaxJsonLength = int.MaxValue;
+            string addressesString = serializer.Serialize(addressesList);
+
+            ViewBag.restaurantsJsonMap = addressesString;
+            ViewBag.restaurantsList = addressesList;
+            ViewBag.recommended = recommended;
+
+            return View();
+        }
+
         private List<int> SlopeOneCalcDB()
         {
             List<int> recommendedIds = new List<int>();

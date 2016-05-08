@@ -98,23 +98,26 @@ var markerContent = function (restaurant) {
     var content = "";
 
     // Check card
-    if (window.location.href.search('Groupon') != -1)
-    {
+    if (window.location.href.search('Groupon') != -1) {
         content = "<h4>" + restaurant.name + "</h4>" +
-        "<p><label>שעות פתיחה : </label> " + restaurant.openingHours + "</p>" +
-        "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
-        "<p><label>תיאור קופון : </label> " + restaurant.copunDescription + "</p>" +
-        "<p><label>קטגוריה : </label> " + restaurant.category + "</p>" +
-        kosher +
-        "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
-        "<p><label>כתובת : </label> " + restaurant.address + "</p>" +
-        "<p><label>הגבלות : </label> " + restaurant.expiration + "</p>";
+                  "<p><label>שעות פתיחה : </label> " + restaurant.openingHours + "</p>" +
+                  "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
+                  "<p><label>תיאור קופון : </label> " + restaurant.copunDescription + "</p>" +
+                  "<p><label>קטגוריה : </label> " + restaurant.category + "</p>" +
+                  kosher +
+                  "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
+                  "<p><label>כתובת : </label> " + restaurant.address + "</p>" +
+                  "<p><label>הגבלות : </label> " + restaurant.expiration + "</p>";
     }
     else if (window.location.href.search('American') != -1) {
 
     }
     else if (window.location.href.search('Leumi') != -1) {
-
+        content = "<h4>" + restaurant.name + "</h4>" +
+                  "<p><label>תיאור : </label> " + restaurant.description + "</p>" +
+                  "<p><label>תיאור קופון : </label> " + restaurant.copunDescription + "</p>" +
+                  "<p><label>טלפון : </label> " + restaurant.phone + "</p>" +
+                  "<p><label>כתובת : </label> " + restaurant.address + "</p>";
     }
     else {
         content = "<h4>" + restaurant.name + "</h4>" +
@@ -134,7 +137,8 @@ var addMarker = function (myLatLng, restaurant) {
     var content = markerContent(restaurant);
     
     var infoWindow = new google.maps.InfoWindow({
-        content: content
+        content: content,
+        maxWidth: 450
     });
 
     var marker = new google.maps.Marker({
