@@ -314,6 +314,7 @@
     <Content Include="Images\blue-marker.png" />
     <Content Include="Images\food_tracker_logo.png" />
     <Content Include="Images\groupon.png" />
+    <Content Include="Images\hever.jpg" />
     <Content Include="Images\laumi.png" />
     <Content Include="Images\logo_temp.PNG" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
@@ -387,6 +388,8 @@
     <Content Include="Views\Shared\_LayoutMobile.cshtml" />
     <Content Include="Views\Home\_Recommended.cshtml" />
     <Content Include="Views\Home\_Map.cshtml" />
+    <Content Include="Views\Home\Groupon.cshtml" />
+    <Content Include="Views\Home\_View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

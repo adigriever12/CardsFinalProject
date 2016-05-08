@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@if (!Request.Browser.IsMobileDevice)
+{
+
+    <div style="display: flex; justify-content: flex-start;align-content:center;">
+
+        <div id="filters" style="order:1;width: 10%;">
+            @Html.Partial("_Recommended")
+        </div>
+
+        <div id="side" style="width: 20%; order:2;border-left: 1px solid #C9E5AA">
+            @Html.Partial("_List")
+        </div>
+
+        @Html.Partial("_Map")
+    </div>
+}
+else
+{
+    <div id="sidenav">
+        <div id="side" style="visibility:hidden;">
+            <ul class="nav nav-tabs">
+                <li class="active"><a class="mDontCls" data-toggle="tab" href='#listTab'><span class="glyphicon glyphicon-cutlery fa-2x mDontCls" aria-hidden="true"></span></a></li>
+                <li class="tab"><a class="mDontCls" data-toggle="tab" href='#recommendedTab'><span class="glyphicon glyphicon-thumbs-up fa-2x mDontCls" aria-hidden="true"></span></a></li>
+                <li class="tab"><a class="mDontCls" data-toggle="tab" href='#settingsTab'><span class="glyphicon glyphicon-user fa-2x mDontCls" aria-hidden="true"></span></a></li>
+            </ul>
+            <div class="tab-content" style="align-content:center; display: flex;">
+                <div id='listTab' class="tab-pane fade in active">
+                    @Html.Partial("_List")
+                </div>
+                <div id='recommendedTab' class="tab-pane fade" style="width: 100%;height: 100%;text-align: center;">
+                    @Html.Partial("_Recommended")
+                </div>
+                <div id='settingsTab' class="tab-pane fade" style="width: 100%;height: 100%;text-align: center;">
+                    @Html.Partial("_LoginPartial")
+                    <hr />
+                    <div id="cards">
+                        <h4>כרטיסים</h4>
+                        <ul>
+                            <li><a href=@Url.Action("Index", "Home")><img class="image_cards" src="~/Images/hever.jpg" /></a></li>
+                            <li><a href=@Url.Action("Leumi", "Home")><img class="image_cards" src="~/Images/laumi.png" /></a></li>
+                            <li><a href=@Url.Action("American", "Home")><img class="image_cards" src="~/Images/american.jpg" /></a></li>
+                            <li><a href=@Url.Action("Groupon", "Home")><img class="image_cards" src="~/Images/groupon.png" /></a></li>
+                        </ul>
+                    </div>
+                    <hr />
+                    <h4>מפה</h4>
+                    <div class="btn-group" role="group">
+                        <button style="display:inline-block;border-radius: 25px;" id="clear-location-filter" type="button" class="btn btn-default">X</button>
+
+                        <div class="dropdown" style="display:inline-block;">
+                            <button id="address-btn" class="btn btn-default dropdown-toggle mDontCls" type="button" data-toggle="dropdown">כתובת</button>
+                            <ul class="dropdown-menu" style="padding: 5px;right: 0;width: 100%;">
+                                <li style="margin-bottom: 0;">
+                                    <input id="location-address-filter" type="text" style="width: 100%;" />
+                                </li>
+                            </ul>
+                        </div>
+                        <button style="display:inline-block;border-bottom-left-radius: 5px;border-top-left-radius: 5px;" id="currentlocation-filter" type="button" class="btn btn-default">מיקום נוכחי</button>
+
+                    </div>
+                    <img style="width: 98%; position: absolute; bottom: 0px;right: 0;" src="~/Images/food_tracker_logo.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainMobile">
+        <span class="mDontCls" id="openNav" onclick="openCloseNav(false)">☰</span>
+        @Html.Partial("_Map")
+    </div>
+}
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/site/site.js"></script>
+<script src="~/Scripts/site/navMobile.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhQ4O1dzFHh07ZDQa3k_ECAbO_LDXQZBA&callback=initMap&libraries=geometry"></script>
