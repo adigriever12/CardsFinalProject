@@ -29,7 +29,7 @@
     margin-bottom: 5px;
 }
 
-#filters li {
+.filter-li {
     list-style-type: none;
     text-align: center;
     margin: 12px;
@@ -38,7 +38,7 @@
     border-radius: 25px;
 }
 
-#filters img {
+.filter-img {
     border-radius: 76px;
     width: 95px;
     height:50px;
@@ -135,7 +135,6 @@ span.glyphicon.glyphicon-ok.been.green{
 }
 
 #sidenav a {
-    padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 15px;
     color: #818181;
