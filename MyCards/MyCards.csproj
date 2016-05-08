@@ -316,10 +316,12 @@
     <Content Include="Images\4.png" />
     <Content Include="Images\5.png" />
     <Content Include="Images\american.jpg" />
+    <Content Include="Images\american.png" />
     <Content Include="Images\blue-marker.png" />
     <Content Include="Images\food_tracker_logo.png" />
     <Content Include="Images\groupon.png" />
     <Content Include="Images\hever.jpg" />
+    <Content Include="Images\laumi.jpg" />
     <Content Include="Images\laumi.png" />
     <Content Include="Images\logo_temp.PNG" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
