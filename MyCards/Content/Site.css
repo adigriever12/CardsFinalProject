@@ -16,9 +16,17 @@
     border-left: 1px solid #C9E5AA;
 }
 
-.image_cards{
+.image_cards {
     height: 51px;
     width: 104px;
+    /*border-radius: 8px;*/
+}
+.selectedCardImage {
+    height: 34px;
+    width: 54px;
+}
+.selectedCard {
+    padding: 3px 5px;
 }
 
 .dropdown-menu label {

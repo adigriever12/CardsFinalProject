@@ -16,15 +16,19 @@ namespace MyCards.Models
         [Column(Order = 1)]
         public ApplicationUser ApplicationUser { get; set; }
 
-        [Key]
+        //[Key]
+        //[Column(Order = 2)]
+        //public Restuarant Restuarant { get; set; }
+
+        //[Key]
         [Column(Order = 2)]
-        public Restuarant Restuarant { get; set; }
+        public int RestuarantId { get; set; }
 
         [DefaultValue(0)]
         [Range(0, 5)]
         public double Rating { get; set; }
 
-        //public Restaurants_Type Ty{get;set;}
+        public Restaurants_Type Type {get;set;}
     }
 
     public enum Restaurants_Type
