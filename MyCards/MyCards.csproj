@@ -276,6 +276,10 @@
     <Compile Include="Migrations\201605071932206_add-laumi.Designer.cs">
       <DependentUpon>201605071932206_add-laumi.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605091734452_user-data-fix.cs" />
+    <Compile Include="Migrations\201605091734452_user-data-fix.Designer.cs">
+      <DependentUpon>201605091734452_user-data-fix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Groupun_Restuarant.cs" />
@@ -458,6 +462,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605071932206_add-laumi.resx">
       <DependentUpon>201605071932206_add-laumi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605091734452_user-data-fix.resx">
+      <DependentUpon>201605091734452_user-data-fix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

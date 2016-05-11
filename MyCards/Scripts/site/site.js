@@ -4,6 +4,8 @@ var markers = [];
 var currentLocation;
 var geocoder;
 
+var cardType;
+
 var intializeMap = function () {
     var mapElement = document.getElementById('map');
 
@@ -90,16 +92,32 @@ var chooseMarker = function (marker, infoWindow) {
 
     infoWindow.open(map, marker);
 };
+
+var getCardType = function () {
+
+    if (window.location.href.search('Groupon') != -1) {
+        return 1;
+    }
+    if (window.location.href.search('Leumi') != -1) {
+        return 2;
+    }
+    if (window.location.href.search('American') != -1) {
+        return 3;
+    }
+    return 0;
+}
+
 var createContentP = function (text, value) {
     return value != "" ? "<p><label>" + text +" : </label> " + value + "</p>" : "";
 }
+
 var markerContent = function (restaurant) {
 
     var accessability = restaurant.handicapAccessibility ? "קיימת" : "לא קיימת";
     var content = "";
 
     // Check card
-    if (window.location.href.search('Groupon') != -1) {
+    if (cardType == 1) {
         content = "<h4>" + restaurant.name + "</h4>" +
                   createContentP("שעות פתיחה", restaurant.openingHours) +
                   createContentP("תיאור", restaurant.description) +
@@ -110,17 +128,17 @@ var markerContent = function (restaurant) {
                   createContentP("כתובת", restaurant.address) +
                   createContentP("הגבלות", restaurant.expiration);
     }
-    else if (window.location.href.search('American') != -1) {
+    else if (cardType == 3) {
 
     }
-    else if (window.location.href.search('Leumi') != -1) {
+    else if (cardType == 2) {
         content = "<h4>" + restaurant.name + "</h4>" +
                   createContentP("תיאור", restaurant.description) +
                   createContentP("תיאור קופון", restaurant.copunDescription) +
                   createContentP("טלפון", restaurant.phone) +
                   createContentP("כתובת", restaurant.address);
     }
-    else {
+    else if (cardType == 0) {
         content = "<h4>" + restaurant.name + "</h4>" +
                   createContentP("שעות פתיחה", restaurant.openingHours) +
                   createContentP("תיאור", restaurant.description) +
@@ -259,7 +277,7 @@ var selectRanking = function () {
         var ratingverageText = $(this).closest("a").children(".ratingAvg");
         
         // Save ranking in db
-        $.post("/Home/UpdateRank", { rank: value, restuarantId: $(this).closest("a").children(".hidden-id").attr('value') },
+        $.post("/Home/UpdateRank", { rank: value, restuarantId: $(this).closest("a").children(".hidden-id").attr('value'), restaurantType: cardType },
             function (data) {
                 ratingverageText[0].innerHTML = data + "/5";
                 });
@@ -285,7 +303,7 @@ var ratings = function () {
             var ratingverageText = self.closest("a").children(".ratingAvg");
 
             // Save ranking in db
-            $.post("/Home/UpdateRank", { rank: rating, restuarantId: self.closest("a").children(".hidden-id").attr('value') },
+            $.post("/Home/UpdateRank", { rank: rating, restuarantId: self.closest("a").children(".hidden-id").attr('value'), restaurantType: cardType },
                 function (data) {
                     ratingverageText[0].innerHTML = data + "/5";
                 });
@@ -299,8 +317,10 @@ var ratings = function () {
             self.closest(".dropdown").removeClass("open");
         };
 
+        var myRatingStars = self.closest("a").children('.hidden-rating')[0].getAttribute('value');
+        
         // rating instance
-        var myRating = rating($(this)[0], 0, 5, callback);
+        var myRating = rating($(this)[0], myRatingStars, 5, callback);
     });
 };
 
@@ -392,7 +412,60 @@ var mobileDisplay = function ()
         $('#map').css('order', '');
     }
 }
+
+var selectCard = function (card) {
+
+    if (document.getElementById('mobile') == null) {
+
+        switch (card) {
+            case 0:
+                {
+                    $("#selectedCard").attr("src", "../Images/hever.jpg");
+                    break;
+                }
+            case 1:
+                {
+                    $("#selectedCard").attr("src", "../Images/groupon.png");
+                    break;
+                }
+            case 2:
+                {
+                    $("#selectedCard").attr("src", "../Images/laumi.jpg");
+                    break;
+                }
+            case 3:
+                {
+                    $("#selectedCard").attr("src", "../Images/american.png");
+                    break;
+                }
+            default:
+
+        }
+    }
+
+}
+var changeCardEvent = function () {
+    $("#hever").click(function () {
+        $("#selectedCard").attr("src", "../Images/hever.jpg");
+    });
+
+    $("#leumi").click(function () {
+        $("#selectedCard").attr("src", "../Images/laumi.jpg");
+    });
+
+    $("#american").click(function () {
+        $("#selectedCard").attr("src", "../Images/american.png");
+    });
+
+    $("#groupon").click(function () {
+        $("#selectedCard").attr("src", "../Images/groupon.png");
+    });
+}
 $(document).ready(function () {
+
+    cardType = getCardType();
+    selectCard(cardType);
+
     listListen();
     searchKeyup();
     filtersChanged();
@@ -400,7 +473,7 @@ $(document).ready(function () {
     selectRanking();
     ratings();
     locationFilters();
-
+    changeCardEvent();
     mobileDisplay();
 
 });

@@ -20,7 +20,7 @@ namespace MyCards.Models
         //[Column(Order = 2)]
         //public Restuarant Restuarant { get; set; }
 
-        [Key]
+        //[Key]
         [Column(Order = 2)]
         public int RestuarantId { get; set; }
 
