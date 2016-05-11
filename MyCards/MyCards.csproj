@@ -19,7 +19,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -276,6 +277,10 @@
     <Compile Include="Migrations\201605071932206_add-laumi.Designer.cs">
       <DependentUpon>201605071932206_add-laumi.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605101532099_delete.cs" />
+    <Compile Include="Migrations\201605101532099_delete.Designer.cs">
+      <DependentUpon>201605101532099_delete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Groupun_Restuarant.cs" />
@@ -331,6 +336,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\foodtracker - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\IIS.pubxml" />
     <None Include="Properties\PublishProfiles\MyCards20160227033011.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\gmaps.js" />
@@ -351,7 +358,9 @@
     <Content Include="Scripts\site\SQLQuery1.sql" />
     <Content Include="Scripts\starRating\star-rating.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -458,6 +467,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605071932206_add-laumi.resx">
       <DependentUpon>201605071932206_add-laumi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605101532099_delete.resx">
+      <DependentUpon>201605101532099_delete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

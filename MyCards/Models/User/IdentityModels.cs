@@ -38,7 +38,6 @@ namespace MyCards.Models
         public DbSet<Location> Locations { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<VisitHistory> VisitHistories { get; set; }
-        public DbSet<UserRankingData> UserRankingData { get; set; }
         public DbSet<UserRanking> UserRanking { get; set; }
         
     }
