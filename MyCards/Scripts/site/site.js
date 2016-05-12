@@ -84,10 +84,10 @@ var chooseMarker = function (marker, infoWindow) {
 
     lastInfoWindow = infoWindow;
 
-    if (infoWindow.getContent().indexOf("img") == -1) {
+    if (infoWindow.getContent().indexOf("data:image") == -1) {
         $.get("/Home/GetImage", { id: marker.id },
             function (data) {
-                infoWindow.setContent("<span style='font-size:25px;font-weight:bold;'>" + marker.title + "</span>" + "<img style='float:left;width: 100px;height:50px;' src='data:image/png;base64," + data + "'><br><br>" + infoWindow.getContent());
+                infoWindow.setContent(infoWindow.getContent().replace("src=''", "src='data:image/png;base64," + data + "'"));
             });
     }
 
@@ -119,7 +119,8 @@ var markerContent = function (restaurant) {
 
     // Check card
     if (cardType == 1) {
-        content = 
+        content = "<span style='font-size:23px;font-weight:bold;margin-left:8px;'>" + restaurant.name + "</span>" +
+                  "<img style='border:0;float:left;width: 100px;height:50px;' src=''><br><br><br>" +
                   createContentP("שעות פתיחה", restaurant.openingHours) +
                   createContentP("תיאור", restaurant.description) +
                   createContentP("תיאור קופון", restaurant.copunDescription) +
@@ -130,7 +131,8 @@ var markerContent = function (restaurant) {
                   createContentP("הגבלות", restaurant.expiration);
     }
     else if (cardType == 3) {
-        content = "<h4>" + restaurant.name + "</h4>" +
+        content = "<span style='font-size:23px;font-weight:bold;margin-left:8px;'>" + restaurant.name + "</span>" +
+                  "<img style='border:0;float:left;width: 100px;height:50px;' src=''><br><br><br>" +
                   createContentP("תיאור", restaurant.description) +
                   createContentP("תיאור קופון", restaurant.copunDescription) +
                   createContentP("טלפון", restaurant.phone) +
@@ -138,14 +140,16 @@ var markerContent = function (restaurant) {
                   createContentP("הגבלות", restaurant.expiration);
     }
     else if (cardType == 2) {
-        content = 
+        content = "<span style='font-size:23px;font-weight:bold;margin-left:8px;'>" + restaurant.name + "</span>" +
+                  "<img style='border:0;float:left;width: 100px;height:50px;' src=''><br><br><br>" +
                   createContentP("תיאור", restaurant.description) +
                   createContentP("תיאור קופון", restaurant.copunDescription) +
                   createContentP("טלפון", restaurant.phone) +
                   createContentP("כתובת", restaurant.address);
     }
     else if (cardType == 0) {
-        content = 
+        content = "<span style='font-size:23px;font-weight:bold;margin-left:8px;'>" + restaurant.name + "</span>" +
+                  "<img style='border:0;float:left;width: 100px;height:50px;' src=''><br><br><br>" +
                   createContentP("שעות פתיחה", restaurant.openingHours) +
                   createContentP("תיאור", restaurant.description) +
                   createContentP("סוג מטבח", restaurant.cuisine) +
