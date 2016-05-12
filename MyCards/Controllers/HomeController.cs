@@ -228,7 +228,7 @@ namespace MyCards.Controllers
 
         public ActionResult American()
         {
-            /* List<int> recommendedIds = SlopeOneCalcDB(Restaurants_Type.American);
+             List<int> recommendedIds = SlopeOneCalcDB(Restaurants_Type.American);
 
              string curUser = User.Identity.GetUserId();
 
@@ -240,7 +240,7 @@ namespace MyCards.Controllers
              List<RestaurantData> addressesList = new List<RestaurantData>();
              List<RecommendedData> recommended = new List<RecommendedData>();
 
-             foreach (Laumi_Restuarant item in addresses)
+             foreach (American_Restuarant item in addresses)
              {
                  RestaurantData data = new RestaurantData();
                  data.id = item.American_RestuarantId;
@@ -290,7 +290,7 @@ namespace MyCards.Controllers
              ViewBag.restaurantsJsonMap = addressesString;
              ViewBag.restaurantsList = addressesList;
              ViewBag.recommended = recommended;
-              */
+              
             return View();
            
         }
@@ -441,11 +441,11 @@ namespace MyCards.Controllers
             }
             else if(restaurantType == Restaurants_Type.American)
             {
-                //var row = db.American_Restuarants.Find(restuarantId);
-                //row.RankningUsersSum++;
-                //row.RankingsSum += rank;
-                //db.Entry(row).State = EntityState.Modified;
-                //return row.RankingsSum / row.RankningUsersSum;
+                var row = db.American_Restuarants.Find(restuarantId);
+                row.RankningUsersSum++;
+                row.RankingsSum += rank;
+                db.Entry(row).State = EntityState.Modified;
+                return row.RankingsSum / row.RankningUsersSum;
             }
 
             return 0;
