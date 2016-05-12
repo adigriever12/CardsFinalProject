@@ -8,6 +8,36 @@ namespace MyCards.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.American_Restuarant",
+                c => new
+                    {
+                        American_RestuarantId = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        Description = c.String(),
+                        Perks = c.String(),
+                        Phone = c.String(),
+                        Expiration = c.String(),
+                        Image = c.Binary(),
+                        RankingsSum = c.Int(nullable: false),
+                        RankningUsersSum = c.Int(nullable: false),
+                        Location_LocationId = c.Int(),
+                    })
+                .PrimaryKey(t => t.American_RestuarantId)
+                .ForeignKey("dbo.Locations", t => t.Location_LocationId)
+                .Index(t => t.Location_LocationId);
+            
+            CreateTable(
+                "dbo.Locations",
+                c => new
+                    {
+                        LocationId = c.Int(nullable: false, identity: true),
+                        Address = c.String(),
+                        lat = c.String(),
+                        lng = c.String(),
+                    })
+                .PrimaryKey(t => t.LocationId);
+            
+            CreateTable(
                 "dbo.Cuisines",
                 c => new
                     {
@@ -29,6 +59,8 @@ namespace MyCards.Migrations
                         Hours = c.String(),
                         PhoneAndContent = c.String(),
                         Image = c.Binary(),
+                        RankingsSum = c.Int(nullable: false),
+                        RankningUsersSum = c.Int(nullable: false),
                         Category_CategoryId = c.Int(),
                         Location_LocationId = c.Int(),
                     })
@@ -48,17 +80,6 @@ namespace MyCards.Migrations
                 .PrimaryKey(t => t.CategoryId);
             
             CreateTable(
-                "dbo.Locations",
-                c => new
-                    {
-                        LocationId = c.Int(nullable: false, identity: true),
-                        Address = c.String(),
-                        lat = c.String(),
-                        lng = c.String(),
-                    })
-                .PrimaryKey(t => t.LocationId);
-            
-            CreateTable(
                 "dbo.Laumi_Restuarant",
                 c => new
                     {
@@ -68,6 +89,8 @@ namespace MyCards.Migrations
                         Perks = c.String(),
                         Phone = c.String(),
                         Image = c.Binary(),
+                        RankingsSum = c.Int(nullable: false),
+                        RankningUsersSum = c.Int(nullable: false),
                         Location_LocationId = c.Int(),
                     })
                 .PrimaryKey(t => t.Laumi_RestuarantId)
@@ -81,13 +104,13 @@ namespace MyCards.Migrations
                         RestuarantId = c.Int(nullable: false, identity: true),
                         Name = c.String(),
                         Description = c.String(),
-                        AverageRanking = c.Double(nullable: false),
+                        RankingsSum = c.Int(nullable: false),
+                        RankningUsersSum = c.Int(nullable: false),
                         Kosher = c.String(),
                         Phone = c.String(),
                         HandicapAccessibility = c.Boolean(nullable: false),
                         Image = c.Binary(),
                         OpeningHours = c.String(),
-                        Score = c.Int(nullable: false),
                         Category_CategoryId = c.Int(),
                         Cuisine_CuisineId = c.Int(),
                         Location_LocationId = c.Int(),
@@ -129,7 +152,7 @@ namespace MyCards.Migrations
                     {
                         UserRankingId = c.Int(nullable: false, identity: true),
                         RestuarantId = c.Int(nullable: false),
-                        Rating = c.Double(nullable: false),
+                        Ranking = c.Int(nullable: false),
                         Type = c.Int(nullable: false),
                         ApplicationUser_Id = c.String(maxLength: 128),
                     })
@@ -197,6 +220,7 @@ namespace MyCards.Migrations
             DropForeignKey("dbo.Laumi_Restuarant", "Location_LocationId", "dbo.Locations");
             DropForeignKey("dbo.Groupun_Restuarant", "Location_LocationId", "dbo.Locations");
             DropForeignKey("dbo.Groupun_Restuarant", "Category_CategoryId", "dbo.Categories");
+            DropForeignKey("dbo.American_Restuarant", "Location_LocationId", "dbo.Locations");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
@@ -210,6 +234,7 @@ namespace MyCards.Migrations
             DropIndex("dbo.Laumi_Restuarant", new[] { "Location_LocationId" });
             DropIndex("dbo.Groupun_Restuarant", new[] { "Location_LocationId" });
             DropIndex("dbo.Groupun_Restuarant", new[] { "Category_CategoryId" });
+            DropIndex("dbo.American_Restuarant", new[] { "Location_LocationId" });
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
@@ -218,10 +243,11 @@ namespace MyCards.Migrations
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Restuarants");
             DropTable("dbo.Laumi_Restuarant");
-            DropTable("dbo.Locations");
             DropTable("dbo.Categories");
             DropTable("dbo.Groupun_Restuarant");
             DropTable("dbo.Cuisines");
+            DropTable("dbo.Locations");
+            DropTable("dbo.American_Restuarant");
         }
     }
 }
