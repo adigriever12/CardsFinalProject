@@ -7,13 +7,13 @@ namespace MyCards.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class newranking : IMigrationMetadata
+    public sealed partial class fixalltables : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(newranking));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(fixalltables));
         
         string IMigrationMetadata.Id
         {
-            get { return "201604271902149_new-ranking"; }
+            get { return "201605121051357_fix-all-tables"; }
         }
         
         string IMigrationMetadata.Source

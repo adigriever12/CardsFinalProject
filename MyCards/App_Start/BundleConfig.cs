@@ -12,6 +12,8 @@ namespace MyCards
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/addedJs").Include(
+                       "~/Scripts/jquery-1.10.2.js",
+                       "~/Scripte/site/navMobile.js",
                        "~/Scripts/site/site.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

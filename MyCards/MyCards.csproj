@@ -19,8 +19,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>
-    </IISExpressSSLPort>
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -217,73 +216,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201603132104251_init.cs" />
-    <Compile Include="Migrations\201603132104251_init.Designer.cs">
-      <DependentUpon>201603132104251_init.cs</DependentUpon>
+    <Compile Include="Migrations\201605111947234_init.cs" />
+    <Compile Include="Migrations\201605111947234_init.Designer.cs">
+      <DependentUpon>201605111947234_init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201603132115388_init1.cs" />
-    <Compile Include="Migrations\201603132115388_init1.Designer.cs">
-      <DependentUpon>201603132115388_init1.cs</DependentUpon>
+    <Compile Include="Migrations\201605121011083_new-version.cs" />
+    <Compile Include="Migrations\201605121011083_new-version.Designer.cs">
+      <DependentUpon>201605121011083_new-version.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201603282044363_add-coordinates.cs" />
-    <Compile Include="Migrations\201603282044363_add-coordinates.Designer.cs">
-      <DependentUpon>201603282044363_add-coordinates.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604122021101_add-score.cs" />
-    <Compile Include="Migrations\201604122021101_add-score.Designer.cs">
-      <DependentUpon>201604122021101_add-score.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604261833533_add-suggestion-algoritm.cs" />
-    <Compile Include="Migrations\201604261833533_add-suggestion-algoritm.Designer.cs">
-      <DependentUpon>201604261833533_add-suggestion-algoritm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604271813080_change-ranking.cs" />
-    <Compile Include="Migrations\201604271813080_change-ranking.Designer.cs">
-      <DependentUpon>201604271813080_change-ranking.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604271902149_new-ranking.cs" />
-    <Compile Include="Migrations\201604271902149_new-ranking.Designer.cs">
-      <DependentUpon>201604271902149_new-ranking.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604271903125_new-ranking1.cs" />
-    <Compile Include="Migrations\201604271903125_new-ranking1.Designer.cs">
-      <DependentUpon>201604271903125_new-ranking1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604271954089_delete-rankings-old.cs" />
-    <Compile Include="Migrations\201604271954089_delete-rankings-old.Designer.cs">
-      <DependentUpon>201604271954089_delete-rankings-old.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604291533052_change-rankings-table.cs" />
-    <Compile Include="Migrations\201604291533052_change-rankings-table.Designer.cs">
-      <DependentUpon>201604291533052_change-rankings-table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605071419539_add-groupun.cs" />
-    <Compile Include="Migrations\201605071419539_add-groupun.Designer.cs">
-      <DependentUpon>201605071419539_add-groupun.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605071421326_add-groupun1.cs" />
-    <Compile Include="Migrations\201605071421326_add-groupun1.Designer.cs">
-      <DependentUpon>201605071421326_add-groupun1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605071519438_fix-table-groupun.cs" />
-    <Compile Include="Migrations\201605071519438_fix-table-groupun.Designer.cs">
-      <DependentUpon>201605071519438_fix-table-groupun.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605071547249_fix-table-user.cs" />
-    <Compile Include="Migrations\201605071547249_fix-table-user.Designer.cs">
-      <DependentUpon>201605071547249_fix-table-user.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605071932206_add-laumi.cs" />
-    <Compile Include="Migrations\201605071932206_add-laumi.Designer.cs">
-      <DependentUpon>201605071932206_add-laumi.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605091734452_user-data-fix.cs" />
-    <Compile Include="Migrations\201605091734452_user-data-fix.Designer.cs">
-      <DependentUpon>201605091734452_user-data-fix.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605101532099_delete.cs" />
-    <Compile Include="Migrations\201605101532099_delete.Designer.cs">
-      <DependentUpon>201605101532099_delete.cs</DependentUpon>
+    <Compile Include="Migrations\201605121051357_fix-all-tables.cs" />
+    <Compile Include="Migrations\201605121051357_fix-all-tables.Designer.cs">
+      <DependentUpon>201605121051357_fix-all-tables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -305,7 +248,6 @@
   <ItemGroup>
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap2-toggle.min.css" />
-    <Content Include="Content\bootstrap-toggle\bootstrap2-toggle.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -355,6 +297,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\site\bootstrap2-toggle.min.js" />
+    <Content Include="Scripts\site\gmap-new.js" />
     <Content Include="Scripts\site\gmap.js" />
     <Content Include="Scripts\site\navMobile.js" />
     <Content Include="Scripts\site\rating.js" />
@@ -427,60 +371,18 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201603132104251_init.resx">
-      <DependentUpon>201603132104251_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603132115388_init1.resx">
-      <DependentUpon>201603132115388_init1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603282044363_add-coordinates.resx">
-      <DependentUpon>201603282044363_add-coordinates.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604122021101_add-score.resx">
-      <DependentUpon>201604122021101_add-score.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604261833533_add-suggestion-algoritm.resx">
-      <DependentUpon>201604261833533_add-suggestion-algoritm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604271813080_change-ranking.resx">
-      <DependentUpon>201604271813080_change-ranking.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604271902149_new-ranking.resx">
-      <DependentUpon>201604271902149_new-ranking.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604271903125_new-ranking1.resx">
-      <DependentUpon>201604271903125_new-ranking1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604271954089_delete-rankings-old.resx">
-      <DependentUpon>201604271954089_delete-rankings-old.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604291533052_change-rankings-table.resx">
-      <DependentUpon>201604291533052_change-rankings-table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605071419539_add-groupun.resx">
-      <DependentUpon>201605071419539_add-groupun.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605071421326_add-groupun1.resx">
-      <DependentUpon>201605071421326_add-groupun1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605071519438_fix-table-groupun.resx">
-      <DependentUpon>201605071519438_fix-table-groupun.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605071547249_fix-table-user.resx">
-      <DependentUpon>201605071547249_fix-table-user.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605071932206_add-laumi.resx">
-      <DependentUpon>201605071932206_add-laumi.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605091734452_user-data-fix.resx">
-      <DependentUpon>201605091734452_user-data-fix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605101532099_delete.resx">
-      <DependentUpon>201605101532099_delete.cs</DependentUpon>
-    </EmbeddedResource>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <EmbeddedResource Include="Migrations\201605111947234_init.resx">
+      <DependentUpon>201605111947234_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605121011083_new-version.resx">
+      <DependentUpon>201605121011083_new-version.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605121051357_fix-all-tables.resx">
+      <DependentUpon>201605121051357_fix-all-tables.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

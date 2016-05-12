@@ -19,12 +19,14 @@ namespace MyCards.Models
 
         public Category Category { get; set; }
 
+        public int RankingsSum { get; set; }
+
+        public int RankningUsersSum { get; set; }
+
         public string Kosher { get; set; }
         public string Phone { get; set; }
         public bool HandicapAccessibility { get; set; }
         public byte[] Image { get; set; }
         public string OpeningHours { get; set; }
-    
-        public int Score { get; set; }
     }
 }

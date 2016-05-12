@@ -461,9 +461,12 @@ var changeCardEvent = function () {
         $("#selectedCard").attr("src", "../Images/groupon.png");
     });
 }
-$(document).ready(function () {
 
+$(document).ready(function () {
     cardType = getCardType();
+
+    initMap();
+    
     selectCard(cardType);
 
     listListen();

@@ -9,7 +9,7 @@ namespace MyCards.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(MyCards.Models.ApplicationDbContext context)

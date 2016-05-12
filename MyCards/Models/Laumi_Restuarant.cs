@@ -23,5 +23,9 @@ namespace MyCards.Models
         public string Phone { get; set; }
 
         public byte[] Image { get; set; }
+
+        public int RankingsSum { get; set; }
+
+        public int RankningUsersSum { get; set; }
     }
 }

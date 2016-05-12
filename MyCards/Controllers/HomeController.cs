@@ -26,17 +26,10 @@ namespace MyCards.Controllers
             List<int> recommendedIds = SlopeOneCalcDB(Restaurants_Type.Hever);
 
             string curUser = User.Identity.GetUserId();
-            IQueryable<UserRanking> userRankingList = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser && 
-                                                                                a.Type == Restaurants_Type.Hever);
 
-            var rankingAvg = db.UserRanking.Where(a => a.Type == Restaurants_Type.Hever)
-                .GroupBy(t => new { RestuarantId = t.RestuarantId })
-                .Select(g => new
-                {
-                    Average = g.Average(p => p.Rating),
-                    RestuarantId = g.Key.RestuarantId
-                }).ToList();
-            
+            var resturantsUserRanked = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser &&
+                                                                 a.Type == Restaurants_Type.Hever).ToDictionary(x => x.RestuarantId);//.Select(x => new Tuple<int, int>(x.RestuarantId, x.Ranking));
+  
             var addresses = db.Restuarants.Include(a => a.Location).Include(b => b.Cuisine).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
 
             List<RestaurantData> addressesList = new List<RestaurantData>();
@@ -60,34 +53,23 @@ namespace MyCards.Controllers
 
                 #region Ranking
 
-                // If i ranked
-                UserRanking findIfRank = userRankingList.ToList().Find(t => t.RestuarantId == item.RestuarantId);
-
-                if (findIfRank == null)
+                if (resturantsUserRanked.ContainsKey(item.RestuarantId))
+                {
+                    data.ratedByMe = true;
+                    data.myRating = resturantsUserRanked[item.RestuarantId].Ranking;
+                }
+                else
                 {
                     data.ratedByMe = false;
                     data.myRating = 0;
                 }
-                else
-                {
-                    data.ratedByMe = true;
-                    data.myRating = Convert.ToInt32(Math.Round(findIfRank.Rating)); // TODO : check if we need rating to be double
-                }
 
-                // Average ranking
-                var findAvg = rankingAvg.Find(t => t.RestuarantId == item.RestuarantId);
-                if (findAvg == null)
-                {
-                    data.ratingAvg = 0;
-                }
-                else
-                {
-                    data.ratingAvg = Convert.ToInt32(Math.Round(findAvg.Average));
-                }
+                data.ratingAvg = item.RankningUsersSum == 0 ? 0 : (int)(item.RankingsSum / item.RankningUsersSum);
+
+
                 #endregion
 
-                data.score = ScoreResturant(Restaurants_Type.Hever, item.Location, item.Category,
-                                            0, 0, data.ratingAvg, userRankingList, data.myRating);
+                data.score = ScoreResturant(data.ratingAvg, data.myRating);
 
                 addressesList.Add(data);
 
@@ -112,18 +94,11 @@ namespace MyCards.Controllers
         public ActionResult Groupon()
         {
             List<int> recommendedIds = SlopeOneCalcDB(Restaurants_Type.Groupun);
-
+            
             string curUser = User.Identity.GetUserId();
-            IQueryable<UserRanking> userRankingList = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser &&
-                                                                                a.Type == Restaurants_Type.Groupun);
 
-            var rankingAvg = db.UserRanking.Where(a => a.Type == Restaurants_Type.Groupun)
-                .GroupBy(t => new { RestuarantId = t.RestuarantId })
-                .Select(g => new
-                {
-                    Average = g.Average(p => p.Rating),
-                    RestuarantId = g.Key.RestuarantId
-                }).ToList();
+            var resturantsUserRanked = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser &&
+                                                                 a.Type == Restaurants_Type.Groupun).ToDictionary(x => x.RestuarantId);
 
             var addresses = db.Groupun_Restuarants.Include(a => a.Location).Include(c => c.Category).OrderBy(n => n.Name).ToArray();
 
@@ -148,35 +123,21 @@ namespace MyCards.Controllers
 
                 #region Ranking
 
-                // If i ranked
-
-                UserRanking findIfRank = userRankingList.ToList().Find(t => t.RestuarantId == item.Groupun_RestuarantId);
-
-                if (findIfRank == null)
+                if (resturantsUserRanked.ContainsKey(item.Groupun_RestuarantId))
+                {
+                    data.ratedByMe = true;
+                    data.myRating = resturantsUserRanked[item.Groupun_RestuarantId].Ranking;
+                }
+                else
                 {
                     data.ratedByMe = false;
                     data.myRating = 0;
                 }
-                else
-                {
-                    data.ratedByMe = true;
-                    data.myRating = Convert.ToInt32(Math.Round(findIfRank.Rating)); // TODO : check if we need rating to be double
-                }
 
-                // Average ranking
-                var findAvg = rankingAvg.Find(t => t.RestuarantId == item.Groupun_RestuarantId);
-                if (findAvg == null)
-                {
-                    data.ratingAvg = 0;
-                }
-                else
-                {
-                    data.ratingAvg = Convert.ToInt32(Math.Round(findAvg.Average));
-                }
+                data.ratingAvg = item.RankningUsersSum == 0 ? 0 : (int)(item.RankingsSum / item.RankningUsersSum);
                 #endregion
 
-                data.score = ScoreResturant(Restaurants_Type.Groupun, item.Location, item.Category, 0, 0,
-                                            data.ratingAvg, userRankingList, data.myRating);
+                data.score = ScoreResturant(data.ratingAvg, data.myRating);
 
                 addressesList.Add(data);
 
@@ -194,7 +155,7 @@ namespace MyCards.Controllers
             ViewBag.restaurantsJsonMap = addressesString;
             ViewBag.restaurantsList = addressesList;
             ViewBag.recommended = recommended;
-
+            
             return View();
         }
 
@@ -203,15 +164,9 @@ namespace MyCards.Controllers
             List<int> recommendedIds = SlopeOneCalcDB(Restaurants_Type.Laumi);
 
             string curUser = User.Identity.GetUserId();
-            IQueryable<UserRanking> userRankingList = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser &&
-                                                                                a.Type == Restaurants_Type.Laumi);
-            var rankingAvg = db.UserRanking.Where(a => a.Type == Restaurants_Type.Laumi)
-                .GroupBy(t => new { RestuarantId = t.RestuarantId })
-                .Select(g => new
-                {
-                    Average = g.Average(p => p.Rating),
-                    RestuarantId = g.Key.RestuarantId
-                }).ToList();
+
+            var resturantsUserRanked = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser &&
+                                                                 a.Type == Restaurants_Type.Laumi).ToDictionary(x => x.RestuarantId);
 
             var addresses = db.Laumi_Restuarants.Include(a => a.Location).OrderBy(n => n.Name).ToArray();
 
@@ -232,38 +187,24 @@ namespace MyCards.Controllers
 
                 #region Ranking
 
-                // If i ranked
-
-                UserRanking findIfRank = userRankingList.ToList().Find(t => t.RestuarantId == item.Laumi_RestuarantId);
-
-                if (findIfRank == null)
+                if (resturantsUserRanked.ContainsKey(item.Laumi_RestuarantId))
+                {
+                    data.ratedByMe = true;
+                    data.myRating = resturantsUserRanked[item.Laumi_RestuarantId].Ranking;
+                }
+                else
                 {
                     data.ratedByMe = false;
                     data.myRating = 0;
                 }
-                else
-                {
-                    data.ratedByMe = true;
-                    data.myRating = Convert.ToInt32(Math.Round(findIfRank.Rating)); // TODO : check if we need rating to be double
-                }
 
-                // Average ranking
-                var findAvg = rankingAvg.Find(t => t.RestuarantId == item.Laumi_RestuarantId);
-                if (findAvg == null)
-                {
-                    data.ratingAvg = 0;
-                }
-                else
-                {
-                    data.ratingAvg = Convert.ToInt32(Math.Round(findAvg.Average));
-                }
+                data.ratingAvg = item.RankningUsersSum == 0 ? 0 : (int)(item.RankingsSum / item.RankningUsersSum);
                 #endregion
 
                 Category category = new Category();
                 category.CategoryId = 0;
 
-                data.score = ScoreResturant(Restaurants_Type.Laumi, item.Location, category, 0, 0,
-                                            data.ratingAvg, userRankingList, data.myRating);
+                data.score = ScoreResturant(data.ratingAvg, data.myRating);
 
                 addressesList.Add(data);
 
@@ -281,7 +222,7 @@ namespace MyCards.Controllers
             ViewBag.restaurantsJsonMap = addressesString;
             ViewBag.restaurantsList = addressesList;
             ViewBag.recommended = recommended;
-
+            
             return View();
         }
 
@@ -306,7 +247,7 @@ namespace MyCards.Controllers
                         {
                             // do something with the row
                             recommendedIds.Add(reader.GetInt32(0));
-                            var rating = reader.GetDouble(3);
+                            var rating = reader.GetInt32(3);
                         }
                     }
                 }
@@ -315,28 +256,8 @@ namespace MyCards.Controllers
             return recommendedIds;
         }
 
-        private double ScoreResturant(Restaurants_Type type, Location location, Category category, double lat, double lng, int avgRanking, IQueryable<UserRanking> userRankingList, int userRating)
+        private double ScoreResturant(int avgRanking, int userRating)
         {
-            GeoCoordinate current = new GeoCoordinate();
-            current.Latitude = lat;
-            current.Longitude = lng;
-
-            GeoCoordinate restaurant = new GeoCoordinate();
-            restaurant.Latitude = Convert.ToDouble(location.lat);
-            restaurant.Longitude = Convert.ToDouble(location.lng);
-
-            double distance = 0;// 1 / current.GetDistanceTo(restaurant);
-
-            double categoryGreatness = 0;
-
-            var visitsCount = userRankingList.Count();
-            var categoryCount = getCategoryCount(type, userRankingList, category);
-
-            if (visitsCount != 0)
-            {
-                categoryGreatness = categoryCount / visitsCount;
-            }
-
             double badRating = 0;
 
             if (userRating == 1 || userRating == 2)
@@ -344,7 +265,7 @@ namespace MyCards.Controllers
                 badRating = (-1) * (1 / userRating);
             }
 
-            double result = distance + avgRanking + categoryGreatness + badRating;
+            double result = avgRanking + badRating;
             
             double normalizeMinMax = Math.Round((result - (-1)) / (7 - (-1)));
 
@@ -355,7 +276,7 @@ namespace MyCards.Controllers
         
         public int getCategoryCount(Restaurants_Type type, IQueryable<UserRanking> userRankingList, Category category)
         {
-            if (type == Restaurants_Type.Hever)
+            /*if (type == Restaurants_Type.Hever)
             {
                 var restaurantCatCount = from a in userRankingList
                                          join b in db.Restuarants on a.RestuarantId equals b.RestuarantId
@@ -406,9 +327,10 @@ namespace MyCards.Controllers
                     return 0;
                 }
 
-            }
+            }*/
             return 0;
         }
+
         [HttpGet]
         public string GetImage(int id)
         {
@@ -422,11 +344,42 @@ namespace MyCards.Controllers
             return "";
         }
 
+        private int updateRestaurantsRank(Restaurants_Type restaurantType, int restuarantId, int rank)
+        {
+            if (restaurantType == Restaurants_Type.Hever)
+            {
+                var row = db.Restuarants.Find(restuarantId);
+                row.RankningUsersSum++;
+                row.RankingsSum += rank;
+                db.Entry(row).State = EntityState.Modified;
+                return row.RankingsSum / row.RankningUsersSum;
+            }
+            else if (restaurantType == Restaurants_Type.Groupun)
+            {
+                var row = db.Groupun_Restuarants.Find(restuarantId);
+                row.RankningUsersSum++;
+                row.RankingsSum += rank;
+                db.Entry(row).State = EntityState.Modified;
+                return row.RankingsSum / row.RankningUsersSum;
+            }
+            else if (restaurantType == Restaurants_Type.Laumi)
+            {
+               var row = db.Laumi_Restuarants.Find(restuarantId);
+                row.RankningUsersSum++;
+                row.RankingsSum += rank;
+                db.Entry(row).State = EntityState.Modified;
+                return row.RankingsSum / row.RankningUsersSum;
+            }
+
+            return 0;
+        }
 
         [HttpPost]
         public int UpdateRank(int rank, int restuarantId, int restaurantType)
         {
             string curUser = User.Identity.GetUserId();
+
+            int average = updateRestaurantsRank((Restaurants_Type)restaurantType, restuarantId, rank);
 
             var userRankingList = db.UserRanking.Where(a => a.RestuarantId == restuarantId &&
                                                             a.ApplicationUser.Id == curUser &&
@@ -435,14 +388,14 @@ namespace MyCards.Controllers
             if (userRankingList.Count() > 0)
             {
                 UserRanking userRanking = userRankingList.First();
-                userRanking.Rating = rank;
-
+                userRanking.Ranking = rank;
+                  
                 db.Entry(userRanking).State = EntityState.Modified;
             }
             else
             {
                 UserRanking newUserRanking = new UserRanking();
-                newUserRanking.Rating = rank;
+                newUserRanking.Ranking = rank;
                 newUserRanking.Type = (Restaurants_Type)restaurantType;
                 newUserRanking.ApplicationUser = db.Users.Find(curUser);
                 newUserRanking.RestuarantId = restuarantId;
@@ -451,13 +404,8 @@ namespace MyCards.Controllers
 
             db.SaveChanges();
 
-            Restaurants_Type type = (Restaurants_Type)Enum.Parse(typeof(Restaurants_Type), restaurantType.ToString());
-
             // Return new average
-            double rankingAvg = db.UserRanking.Where(a => a.RestuarantId == restuarantId &&
-                                                           a.Type == type)
-                                             .Average(b => b.Rating);
-            return Convert.ToInt32(Math.Floor(rankingAvg));
+            return average;
         }
 
         public ActionResult _List(double lat, double lng)
