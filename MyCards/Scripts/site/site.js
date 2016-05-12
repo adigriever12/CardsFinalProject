@@ -87,7 +87,7 @@ var chooseMarker = function (marker, infoWindow) {
     if (infoWindow.getContent().indexOf("img") == -1) {
         $.get("/Home/GetImage", { id: marker.id },
             function (data) {
-                infoWindow.setContent(infoWindow.getContent() + "<img style='width: 100px;height:50px;' src='data:image/png;base64," + data + "'>");
+                infoWindow.setContent("<span style='font-size:25px;font-weight:bold;'>" + marker.title + "</span>" + "<img style='float:left;width: 100px;height:50px;' src='data:image/png;base64," + data + "'><br><br>" + infoWindow.getContent());
             });
     }
 
@@ -119,7 +119,7 @@ var markerContent = function (restaurant) {
 
     // Check card
     if (cardType == 1) {
-        content = "<h4>" + restaurant.name + "</h4>" +
+        content = 
                   createContentP("שעות פתיחה", restaurant.openingHours) +
                   createContentP("תיאור", restaurant.description) +
                   createContentP("תיאור קופון", restaurant.copunDescription) +
@@ -133,14 +133,14 @@ var markerContent = function (restaurant) {
 
     }
     else if (cardType == 2) {
-        content = "<h4>" + restaurant.name + "</h4>" +
+        content = 
                   createContentP("תיאור", restaurant.description) +
                   createContentP("תיאור קופון", restaurant.copunDescription) +
                   createContentP("טלפון", restaurant.phone) +
                   createContentP("כתובת", restaurant.address);
     }
     else if (cardType == 0) {
-        content = "<h4>" + restaurant.name + "</h4>" +
+        content = 
                   createContentP("שעות פתיחה", restaurant.openingHours) +
                   createContentP("תיאור", restaurant.description) +
                   createContentP("סוג מטבח", restaurant.cuisine) +
@@ -168,7 +168,7 @@ var addMarker = function (myLatLng, restaurant) {
         title: restaurant.name,
         icon: {
             url: '../Images/' + restaurant.score + '.png',
-            //scaledSize: new google.maps.Size(50, 50)
+            scaledSize: new google.maps.Size(50, 50)
         }
     });
 
