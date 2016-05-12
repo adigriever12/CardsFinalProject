@@ -20,11 +20,25 @@
 
                 @if (@item.ratedByMe == true)
                 {
-                    <span class="glyphicon glyphicon-ok been green dropdown-toggle mDontCls" data-toggle="dropdown"></span>
+                    if (!Request.Browser.IsMobileDevice)
+                    {
+                        <span class="glyphicon glyphicon-ok been green dropdown-toggle mDontCls" data-toggle="dropdown"></span>
+                    }
+                    else
+                    {
+                        <span style="font-size:20px" class="glyphicon glyphicon-ok been green dropdown-toggle mDontCls" data-toggle="dropdown"></span>
+                    }
                 }
                 else
                 {
-                    <span class="glyphicon glyphicon-ok been grey dropdown-toggle mDontCls" data-toggle="dropdown"></span>
+                    if (!Request.Browser.IsMobileDevice)
+                    {
+                        <span class="glyphicon glyphicon-ok been grey dropdown-toggle mDontCls" data-toggle="dropdown"></span>
+                    }
+                    else
+                    {
+                        <span style="font-size:20px" class="glyphicon glyphicon-ok been grey dropdown-toggle mDontCls" data-toggle="dropdown"></span>
+                    }
                 }
 
                 <ul class="dropdown-menu">
@@ -36,22 +50,8 @@
                 <br>
             </div>
             <br>
-            @if (!Request.Browser.IsMobileDevice)
-            {
-                <span class="item-name been ratingAvg" style="font-size:10px; direction:ltr;">@item.ratingAvg/5</span>
-            }
-            else
-            {
-                <div class="dropdown" style="float:left;">
-                    <span class="item-name been ratingAvg dropdown-toggle mDontCls" data-toggle="dropdown" style="font-size:10px; direction:ltr;">@item.ratingAvg/5</span>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <ul class="c-rating mDontCls" style="margin-left: 18px; direction: ltr;"></ul>
-                        </li>
-                    </ul>
-                    <br>
-                </div>
-            }
+            <span class="item-name been ratingAvg" style="font-size:10px; direction:ltr;">@item.ratingAvg/5</span>
+
             <span style="font-size:10px">
                 @item.address
             </span>
