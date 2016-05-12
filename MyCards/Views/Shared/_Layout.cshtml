@@ -22,7 +22,11 @@
     
     <nav id="nav-header" style="justify-content:space-between;display:flex; flex-direction: row-reverse;align-items:center;background-color: #96C670;border-bottom: 1px inset #689831;">          
         <a href="@Url.Action(Url.Content("../"))" ><img style="height: 45px;" src="..\Images\logo_temp.PNG" /></a>
-      
+
+      @* Check if cards and location should be displayed *@
+      @if (!((RazorView)Html.ViewContext.View).ViewPath.Contains("Account") &&
+           !((RazorView)Html.ViewContext.View).ViewPath.Contains("Manage"))
+      {
         <div class="btn-group" role="group">
             <button style="display:inline-block;border-radius: 25px;" id="clear-location-filter" type="button" class="btn btn-default">X</button>
 
@@ -51,7 +55,7 @@
                 <li><a href=@Url.Action("Groupon", "Home")><img id="groupon" class="image_cards" src="~/Images/groupon.png"/></a></li>
             </ul>
         </div>
-
+      }
         @Html.Partial("_LoginPartial")
     </nav>
     
