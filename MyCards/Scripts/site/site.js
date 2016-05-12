@@ -130,7 +130,12 @@ var markerContent = function (restaurant) {
                   createContentP("הגבלות", restaurant.expiration);
     }
     else if (cardType == 3) {
-
+        content = "<h4>" + restaurant.name + "</h4>" +
+                  createContentP("תיאור", restaurant.description) +
+                  createContentP("תיאור קופון", restaurant.copunDescription) +
+                  createContentP("טלפון", restaurant.phone) +
+                  createContentP("כתובת", restaurant.address) + 
+                  createContentP("הגבלות", restaurant.expiration);
     }
     else if (cardType == 2) {
         content = 
@@ -360,6 +365,18 @@ var locationFilters = function () {
     $("#clear-location-filter").click(function () {
         makeAllMarkersVisible();
     });
+
+    $("#mobileSearchAdd").click(function () {
+        geocoder.geocode({ 'address': $("#location-address-filter").val() }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+
+                removeMarkersByDistance(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    });
 };
 
 var makeAllMarkersVisible = function () {
@@ -412,6 +429,10 @@ var mobileDisplay = function ()
         $('#map').css('width', window.innerWidth + 'px');
         $('#map').css('order', '');
     }
+
+    $(window).on("orientationchange", function () {
+        location.reload();
+    });
 }
 
 var selectCard = function (card) {

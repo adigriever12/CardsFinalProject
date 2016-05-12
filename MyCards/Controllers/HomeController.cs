@@ -226,6 +226,75 @@ namespace MyCards.Controllers
             return View();
         }
 
+        public ActionResult American()
+        {
+             List<int> recommendedIds = SlopeOneCalcDB(Restaurants_Type.American);
+
+             string curUser = User.Identity.GetUserId();
+
+             var resturantsUserRanked = db.UserRanking.Where(a => a.ApplicationUser.Id == curUser &&
+                                                                  a.Type == Restaurants_Type.American).ToDictionary(x => x.RestuarantId);
+
+             var addresses = db.American_Restuarants.Include(a => a.Location).OrderBy(n => n.Name).ToArray();
+
+             List<RestaurantData> addressesList = new List<RestaurantData>();
+             List<RecommendedData> recommended = new List<RecommendedData>();
+
+             foreach (American_Restuarant item in addresses)
+             {
+                 RestaurantData data = new RestaurantData();
+                 data.id = item.American_RestuarantId;
+                 data.lat = item.Location.lat;
+                 data.lng = item.Location.lng;
+                 data.name = item.Name;
+                 data.description = item.Description;
+                 data.copunDescription = item.Perks;
+                 data.phone = item.Phone;
+                 data.address = item.Location.Address;
+                 data.expiration = item.Expiration;
+
+                 #region Ranking
+
+                 if (resturantsUserRanked.ContainsKey(item.American_RestuarantId))
+                 {
+                     data.ratedByMe = true;
+                     data.myRating = resturantsUserRanked[item.American_RestuarantId].Ranking;
+                 }
+                 else
+                 {
+                     data.ratedByMe = false;
+                     data.myRating = 0;
+                 }
+
+                 data.ratingAvg = item.RankningUsersSum == 0 ? 0 : (int)(item.RankingsSum / item.RankningUsersSum);
+                 #endregion
+
+                 Category category = new Category();
+                 category.CategoryId = 0;
+
+                 data.score = ScoreResturant(data.ratingAvg, data.myRating);
+
+                 addressesList.Add(data);
+
+                 if (recommendedIds.Contains(data.id))
+                 {
+                     recommended.Add(new RecommendedData(data.id, item.Name, item.Image));
+                 }
+             }
+
+             addressesList.Sort((x, y) => y.score.CompareTo(x.score));
+
+             JavaScriptSerializer serializer = new JavaScriptSerializer();
+             string addressesString = serializer.Serialize(addressesList);
+
+             ViewBag.restaurantsJsonMap = addressesString;
+             ViewBag.restaurantsList = addressesList;
+             ViewBag.recommended = recommended;
+              
+            return View();
+           
+        }
+
         private List<int> SlopeOneCalcDB(Restaurants_Type type)
         {
             List<int> recommendedIds = new List<int>();
@@ -365,6 +434,14 @@ namespace MyCards.Controllers
             else if (restaurantType == Restaurants_Type.Laumi)
             {
                var row = db.Laumi_Restuarants.Find(restuarantId);
+                row.RankningUsersSum++;
+                row.RankingsSum += rank;
+                db.Entry(row).State = EntityState.Modified;
+                return row.RankingsSum / row.RankningUsersSum;
+            }
+            else if(restaurantType == Restaurants_Type.American)
+            {
+                var row = db.American_Restuarants.Find(restuarantId);
                 row.RankningUsersSum++;
                 row.RankingsSum += rank;
                 db.Entry(row).State = EntityState.Modified;
