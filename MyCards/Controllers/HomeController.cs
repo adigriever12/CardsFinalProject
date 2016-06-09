@@ -334,13 +334,13 @@ namespace MyCards.Controllers
                 badRating = (-1) * (1 / userRating);
             }
 
-            double result = avgRanking + badRating;
-            
+            double result = avgRanking;// + badRating;
+
             double normalizeMinMax = Math.Round((result - (-1)) / (7 - (-1)));
 
             int markerCategoryByScore = Convert.ToInt32(Math.Round(normalizeMinMax * 5));
 
-            return markerCategoryByScore;
+            return result;// markerCategoryByScore;
         }
         
         public int getCategoryCount(Restaurants_Type type, IQueryable<UserRanking> userRankingList, Category category)
