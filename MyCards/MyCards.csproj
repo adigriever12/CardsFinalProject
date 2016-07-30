@@ -212,7 +212,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\RestuarantsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -238,6 +237,8 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-toggle.min.css" />
+    <Content Include="Content\bootstrap-toggle.min.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap2-toggle.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -277,6 +278,7 @@
     <Content Include="Content\glyphicons-halflings-regular.eot" />
     <Content Include="Content\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\glyphicons-halflings-regular.woff" />
+    <Content Include="ClassDiagram5.cd" />
     <None Include="Properties\PublishProfiles\foodtracker - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\IIS.pubxml" />
     <None Include="Properties\PublishProfiles\MyCards20160227033011.pubxml" />
@@ -338,11 +340,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
-    <Content Include="Views\Restuarants\Create.cshtml" />
-    <Content Include="Views\Restuarants\Delete.cshtml" />
-    <Content Include="Views\Restuarants\Details.cshtml" />
-    <Content Include="Views\Restuarants\Edit.cshtml" />
-    <Content Include="Views\Restuarants\Index.cshtml" />
     <Content Include="Views\Home\_List.cshtml" />
     <Content Include="Views\Shared\_LayoutMobile.cshtml" />
     <Content Include="Views\Home\_Recommended.cshtml" />

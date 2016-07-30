@@ -31,21 +31,13 @@ namespace MyCards
                        "~/Scripts/site/rating.js"
                       ));
 
-            //bundles.Add(new ScriptBundle("~/bundles/gmaps").Include(
-            //         "~/Scripts/gmaps.js",
-            //        "~/Scripts/site/site.js"));
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/bootstrap-toggle/bootstrap2-toggle.min.css",
                       "~/Content/starRating/star-rating.css",
                       "~/Content/starRating/theme-krajee-fa.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/rating.css"));
-
-            bundles.Add(new StyleBundle("~/Content/bootstrap-toggle").Include(
-                      "~/Content/bootstrap-toggle/bootstrap2-toggle.min.js"));
 
         }
     }

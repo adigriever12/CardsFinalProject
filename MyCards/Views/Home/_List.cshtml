@@ -1,16 +1,34 @@
-﻿<input id="searchBox" type="search" class="form-control mDontCls" placeholder="חיפוש" style="width: 75%;display: inline-block;">
-
-<div class="dropdown" style="display:inline-block;">
-    <button class="btn btn-default dropdown-toggle mDontCls" type="button" data-toggle="dropdown">
-        סנן
-        <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-        <li><label class="mDontCls">נגישות</label><input id="accessibility-toggle" type="checkbox" data-toggle="toggle" class="mDontCls"/></li>
-        <li><label class="mDontCls">כשרות</label><input id="kosher-toggle" type="checkbox" data-toggle="toggle" class="mDontCls"></li>
-    </ul>
-</div>
-
+﻿
+@if(ViewBag.cardType == 0)
+{
+    <input id="searchBox" type="search" class="form-control mDontCls" placeholder="חיפוש" style="width: 75%;display: inline-block;">
+    <div class="dropdown" style="display:inline-block;">
+        <button class="btn btn-default dropdown-toggle  mDontCls" type="button" data-toggle="dropdown">
+            סנן
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+    <li style="display: flex;justify-content: space-around;align-items: center;">
+    <label class="mDontCls">נגישות</label>
+    <label class="switch mDontCls">
+      <input id="accessibility-toggle" type="checkbox" class="mDontCls">
+      <div class="slider round mDontCls"></div>
+    </label>
+    </li>
+    <li style="display: flex;justify-content: space-around;align-items: center;">
+    <label class="mDontCls">כשרות</label>
+    <label class="switch mDontCls">
+      <input id="kosher-toggle" type="checkbox" class="mDontCls">
+      <div class="slider round mDontCls"></div>
+    </label>
+    </li>
+        </ul>
+    </div>
+}
+else
+{
+    <input id="searchBox" type="search" class="form-control mDontCls" placeholder="חיפוש" style="width: 100%;display: inline-block;">
+}
 <div class="list-group" style="overflow-y: scroll;height: 86.5vh;">
     @foreach (var item in ViewBag.restaurantsList)
     {

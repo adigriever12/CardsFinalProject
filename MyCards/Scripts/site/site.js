@@ -6,6 +6,7 @@ var geocoder;
 
 var cardType;
 
+// set map intialization configuration
 var intializeMap = function () {
     var mapElement = document.getElementById('map');
 
@@ -16,13 +17,16 @@ var intializeMap = function () {
         styles: [{ "featureType": "road", "elementType": "geometry", "stylers": [{ "lightness": 100 }, { "visibility": "simplified" }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "visibility": "on" }, { "color": "#C6E2FF" }] }, { "featureType": "poi", "elementType": "geometry.fill", "stylers": [{ "color": "#C5E3BF" }] }, { "featureType": "road", "elementType": "geometry.fill", "stylers": [{ "color": "#D1D1B8" }] }]
     };
 
+    // creating map object
     map = new google.maps.Map(mapElement, mapOptions);
     geocoder = new google.maps.Geocoder();
 }
 
+// add marker to each resturant. Restauratns data is calculated in HomeController, and parsed here
 var intializMarkers = function () {
     var restaurants = $("#mapAddresses").data("value");
 
+    // iterating all restaurants
     for (var i = 0; i < restaurants.length; i++) {
         var myLatLng = new Object();
 
@@ -32,35 +36,36 @@ var intializMarkers = function () {
     }
 };
 
+// determining user current location, and setting in on map
 var setCurrentLocation = function () {
     // Set map center to current location
     var initialLocation;
 
     if (navigator.geolocation) {
+        // get the user current position
         navigator.geolocation.getCurrentPosition(function (position) {
 
-           
-            //$("#load").load("Home/_List", { lat: position.coords.latitude, lng: position.coords.longitude }, function () {
-                //intializeMap();
-            //intializMarkers();
+            // builiding current location object for lat and lng
             currentLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
-                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                map.setCenter(initialLocation);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: initialLocation,
-                    title: 'מיקום נוכחי',
-                    zIndex: google.maps.Marker.MAX_ZINDEX + 1,
-                    icon: {
-                        url: '../Images/blue-marker.png',
-                        scaledSize: new google.maps.Size(50, 50)
-                    }
-                });
-            //});
+            initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-            
+            // focusing map on current location
+            map.setCenter(initialLocation);
 
-        }, function () {
+            // add a blue marker to current location
+            var marker = new google.maps.Marker({
+                map: map,
+                position: initialLocation,
+                title: 'מיקום נוכחי',
+                zIndex: google.maps.Marker.MAX_ZINDEX + 1,
+                icon: {
+                    url: '../Images/blue-marker.png',
+                    scaledSize: new google.maps.Size(50, 50)
+                }
+            });
+
+        }, function (error) {
+            console.log("error calculating user current position");
         });
     }
         // Browser doesn't support Geolocation
@@ -77,23 +82,29 @@ var initMap = function () {
 
 var lastInfoWindow;
 
+// handling event of clicking a marker
 var chooseMarker = function (marker, infoWindow) {
+    // closing the last opened info window in order to open only the new one
     if (lastInfoWindow !== undefined) {
         lastInfoWindow.close();
     }
 
+    // saving current clicked markers info window
     lastInfoWindow = infoWindow;
 
+    // gets the marker image
     if (infoWindow.getContent().indexOf("data:image") == -1) {
-        $.get("/Home/GetImage", { id: marker.id },
+        $.get("/Home/GetImage", { id: marker.id, restaurantType: cardType },
             function (data) {
                 infoWindow.setContent(infoWindow.getContent().replace("src=''", "src='data:image/png;base64," + data + "'"));
             });
     }
 
+    // opening marker info window with it's image
     infoWindow.open(map, marker);
 };
 
+// returning current card type by url
 var getCardType = function () {
 
     if (window.location.href.search('Groupon') != -1) {
@@ -112,6 +123,7 @@ var createContentP = function (text, value) {
     return value != "" ? "<p><label>" + text +" : </label> " + value + "</p>" : "";
 }
 
+// creating marker info window
 var markerContent = function (restaurant) {
 
     var accessability = restaurant.handicapAccessibility ? "קיימת" : "לא קיימת";
@@ -136,8 +148,7 @@ var markerContent = function (restaurant) {
                   createContentP("תיאור", restaurant.description) +
                   createContentP("תיאור קופון", restaurant.copunDescription) +
                   createContentP("טלפון", restaurant.phone) +
-                  createContentP("כתובת", restaurant.address) + 
-                  createContentP("הגבלות", restaurant.expiration);
+                  createContentP("כתובת", restaurant.address);
     }
     else if (cardType == 2) {
         content = "<span style='font-size:23px;font-weight:bold;margin-left:8px;'>" + restaurant.name + "</span>" +
@@ -161,10 +172,14 @@ var markerContent = function (restaurant) {
     }
     return content;
 }
+
+// create a Gmap marker object by given position
 var addMarker = function (myLatLng, restaurant) {
 
+    // creating marker content
     var content = markerContent(restaurant);
     
+    // creating marker pop-up info window
     var infoWindow = new google.maps.InfoWindow({
         content: content,
         maxWidth: 450
@@ -181,10 +196,12 @@ var addMarker = function (myLatLng, restaurant) {
         }
     });
 
+    // add click listen event to marker
     marker.addListener('click', function () {
         chooseMarker(marker, infoWindow);
     });
 
+    // saving marker to an array containing all markers
     markers.push({
         id: restaurant.id,
         marker: marker,
@@ -192,6 +209,7 @@ var addMarker = function (myLatLng, restaurant) {
     });
 };
 
+// get marker by given id from markers array
 var findMarkerById = function (id) {
     for (var i = 0; i < markers.length; i++) {
         if (markers[i].id == id) {
@@ -200,17 +218,20 @@ var findMarkerById = function (id) {
     }
 };
 
+// listen to click event on list
 var listListen = function () {
     $(".list-group-item").click(function () {
 
         var clickedItem = $(event.target).first();
-        // Check if not the "been" btn then open the details
+
+        // Check if the clicked button was not the "rakning", then open the details
         if ((!clickedItem.hasClass('green')) && (!clickedItem.hasClass('grey')) && (!clickedItem.hasClass('c-rating__item')))
         {
             var id = $(this).find('.hidden-id').attr('value');
             var marker = findMarkerById(id);
             var infoWindow = marker.info;
 
+            // open restaurant info window in map view
             chooseMarker(marker.marker, marker.info);
         }
 
@@ -218,88 +239,85 @@ var listListen = function () {
     });
 };
 
-var searchKeyup = function() {
+// listen to key up event and filter list by typed letters
+var searchKeyup = function () {
     $("#searchBox").keyup(function () {
 
+        // get typed content
         var searchedContent = $("#searchBox").val().toLowerCase();
 
-        //if (searchedContent != "") {
-            $.each($(".list-group-item"), function (i, val) {
-                var name = $(this).find('.item-name').text().toLowerCase();
+        // for each restaurant in the list
+        $.each($(".list-group-item"), function (i, val) {
 
-                if (name.indexOf(searchedContent) == -1) {
-                    $(this).attr('class', 'list-group-item hidden');
-                }
-                else {
-                    $(this).attr('class', 'list-group-item');
-                }
-            });
-        //}
+            // get the restaurant name
+            var name = $(this).find('.item-name').text().toLowerCase();
+
+            // in case the restuarnt name does not contain the typed letters
+            if (name.indexOf(searchedContent) == -1) {
+                $(this).attr('class', 'list-group-item hidden');
+            }
+            else {
+                $(this).attr('class', 'list-group-item');
+            }
+        });
     });
 };
+
+// functionlity of toggles being selected
+var filterByToogles = function () {
+    var isAccessabilityChecked = $("#accessibility-toggle").prop('checked');
+    var isKosherChecked = $("#kosher-toggle").prop('checked');
+
+    $.each($(".list-group-item"), function (i, val) {
+        var accessibility = $(this).find('.hidden-accessibility').attr('value').toLowerCase();
+        var kosher = $(this).find('.hidden-kosher').attr('value').toLowerCase();
+
+        if (isAccessabilityChecked && !isKosherChecked) {
+            if (accessibility != isAccessabilityChecked.toString()) {
+                $(this).attr('class', 'list-group-item hidden');
+            } else {
+                $(this).attr('class', 'list-group-item');
+            }
+        } else if (!isAccessabilityChecked && isKosherChecked) {
+            if (kosher == "") {
+                $(this).attr('class', 'list-group-item hidden');
+            } else {
+                $(this).attr('class', 'list-group-item');
+            }
+        } else if (isAccessabilityChecked && isKosherChecked) {
+            if (accessibility != isAccessabilityChecked.toString() || kosher == "") {
+                $(this).attr('class', 'list-group-item hidden');
+            } else {
+                $(this).attr('class', 'list-group-item');
+            }
+        } else {
+            $(this).attr('class', 'list-group-item');
+        }
+
+    });
+}
 
 var filtersChanged = function () {
     $('#accessibility-toggle').change(function () {
-        var isChecked = $(this).prop('checked').toString();
-
-        $.each($(".list-group-item"), function (i, val) {
-            var accessibility = $(this).find('.hidden-accessibility').attr('value').toLowerCase();
-
-            if (accessibility != isChecked) {
-                $(this).attr('class', 'list-group-item hidden');
-            }
-            else {
-                $(this).attr('class', 'list-group-item');
-            }
-
-        });
+        filterByToogles();
     });
 
     $('#kosher-toggle').change(function () {
-        var isChecked = $(this).prop('checked');
-
-        $.each($(".list-group-item"), function (i, val) {
-            var kosher = $(this).find('.hidden-kosher').attr('value').toLowerCase();
-
-            if (kosher == "" && isChecked) {
-                $(this).attr('class', 'list-group-item hidden');
-            }
-            else {
-                $(this).attr('class', 'list-group-item');
-            }
-
-        });
+        filterByToogles();
     });
 };
 
+// event click on new recommended restaurant
 var recommendedClick = function () {
     $(".recommended-items").click(function () {
         var id = $(this).children(".recommended-ids.hidden").text();
+
+        // find the restaurants marker in the map
         var marker = findMarkerById(id);
         var infoWindow = marker.info;
+
+        // open the marker of the clicked restaurant in the map
         chooseMarker(marker.marker, marker.info);
-    });
-};
-
-var selectRanking = function () {
-    $('.inputStar').on('rating.change', function (event, value, caption) {
-
-        var ratingverageText = $(this).closest("a").children(".ratingAvg");
-        
-        // Save ranking in db
-        $.post("/Home/UpdateRank", { rank: value, restuarantId: $(this).closest("a").children(".hidden-id").attr('value'), restaurantType: cardType },
-            function (data) {
-                ratingverageText[0].innerHTML = data + "/5";
-                });
-
-        // Change been color to green
-        var beenBtn = $(this).closest(".dropdown").children(".glyphicon-ok");
-        beenBtn.removeClass("grey");
-        beenBtn.addClass("green");
-
-        // Close dropdown
-        $(this).closest(".dropdown").removeClass("open");
-        
     });
 };
 
@@ -337,6 +355,7 @@ var ratings = function () {
 var locationFilters = function () {
 
     $("#location-address-filter").click(function (e) {
+        // stop dropdown from closing
         e.stopPropagation();
     });
 
@@ -344,10 +363,14 @@ var locationFilters = function () {
         // pressed enter
         if (e.keyCode == 13) {
 
+            // focusing map on typed address
             geocoder.geocode({ 'address': $("#location-address-filter").val() }, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
+
+                    // centering map on chosen location
                     map.setCenter(results[0].geometry.location);
                     
+                    // clearing all markers, the keeping only onces within 5 kilometer raduis
                     removeMarkersByDistance(results[0].geometry.location.lat(), results[0].geometry.location.lng());
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
@@ -356,8 +379,10 @@ var locationFilters = function () {
         }
     });
 
+    // event for current location button click
     $("#currentlocation-filter").click(function () {
 
+        // in case the button is pressed
         if ($(this).attr('class').indexOf('active') == -1) {
             removeMarkersByDistance(currentLocation.lat, currentLocation.lng);
             map.setCenter(currentLocation);
@@ -366,10 +391,12 @@ var locationFilters = function () {
         }
     });
 
+    // clicking the cancel button
     $("#clear-location-filter").click(function () {
         makeAllMarkersVisible();
     });
 
+    // address filtering for mobile
     $("#mobileSearchAdd").click(function () {
         geocoder.geocode({ 'address': $("#location-address-filter").val() }, function (results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
@@ -423,6 +450,7 @@ var removeMarkersByDistance = function (lat, lng) {
     });
 };
 
+// altering css for mobile
 var mobileDisplay = function ()
 {
     // Check if mobile
@@ -439,6 +467,7 @@ var mobileDisplay = function ()
     });
 }
 
+// set selected card image
 var selectCard = function (card) {
 
     if (document.getElementById('mobile') == null) {
@@ -468,9 +497,19 @@ var selectCard = function (card) {
 
         }
     }
+    else {
+        $.each($("#cards .image_cards"), function (i, curr) {
+            $(curr).attr('class', 'image_cards');
+        });
 
+        $($("#cards .image_cards")[card]).attr('class', 'image_cards selected_mobile');
+
+    }
 }
+
+// change card image when clicking on a different card
 var changeCardEvent = function () {
+
     $("#hever").click(function () {
         $("#selectedCard").attr("src", "../Images/hever.jpg");
     });
@@ -492,17 +531,13 @@ $(document).ready(function () {
     cardType = getCardType();
 
     initMap();
-    
     selectCard(cardType);
-
     listListen();
     searchKeyup();
     filtersChanged();
     recommendedClick();
-    selectRanking();
     ratings();
     locationFilters();
     changeCardEvent();
     mobileDisplay();
-
 });
